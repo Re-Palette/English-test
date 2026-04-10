@@ -624,6 +624,26 @@ tr:hover td { background: #f8f9fd; }
 
   <!-- STUDENTS -->
   <div id="admin-students" class="admin-page">
+    <div class="section-card" style="margin-bottom:16px;border:1.5px solid #c0d0f0">
+      <div class="section-title" style="color:var(--navy)">🔑 管理者パスワードを変更</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+        <div style="flex:1;min-width:160px">
+          <label class="form-label">現在のパスワード</label>
+          <input id="pw-current" class="inp" type="password" placeholder="現在のパスワード">
+        </div>
+        <div style="flex:1;min-width:160px">
+          <label class="form-label">新しいパスワード</label>
+          <input id="pw-new" class="inp" type="password" placeholder="新しいパスワード">
+        </div>
+        <div style="flex:1;min-width:160px">
+          <label class="form-label">新しいパスワード（確認）</label>
+          <input id="pw-confirm" class="inp" type="password" placeholder="もう一度入力">
+        </div>
+        <button class="btn-sm btn-navy" onclick="changeAdminPw()">変更する</button>
+      </div>
+      <div class="error-msg" id="pw-err" style="margin-top:10px;margin-bottom:0"></div>
+      <div id="pw-ok" style="display:none;margin-top:10px;background:var(--green-pale);color:var(--green);border:1px solid #a0d8bc;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700">✅ パスワードを変更しました</div>
+    </div>
     <div class="section-card" style="margin-bottom:16px">
       <div class="section-title">生徒を追加</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -657,7 +677,7 @@ tr:hover td { background: #f8f9fd; }
 
 <script>
 // ══ STATE ══
-const ADMIN_PW = '0000'; // 管理者パスワード（変更可）
+let ADMIN_PW = localStorage.getItem('ets_admin_pw') || '0000'; // 管理者パスワード
 let students = JSON.parse(localStorage.getItem('ets_students') || '[]');
 let tests    = JSON.parse(localStorage.getItem('ets_tests')    || '[]');
 let submissions = JSON.parse(localStorage.getItem('ets_subs')  || '[]');
@@ -674,6 +694,7 @@ function save() {
   localStorage.setItem('ets_students', JSON.stringify(students));
   localStorage.setItem('ets_tests', JSON.stringify(tests));
   localStorage.setItem('ets_subs', JSON.stringify(submissions));
+  localStorage.setItem('ets_admin_pw', ADMIN_PW);
 }
 
 // ══ SCREEN ══
@@ -886,6 +907,27 @@ function submitScore() {
     document.getElementById('logout-btn-success').textContent = 'ログアウト';
   }
   showScreen('screen-success');
+}
+
+function changeAdminPw() {
+  const cur     = document.getElementById('pw-current').value;
+  const newPw   = document.getElementById('pw-new').value;
+  const confirm = document.getElementById('pw-confirm').value;
+  const errEl   = document.getElementById('pw-err');
+  const okEl    = document.getElementById('pw-ok');
+  errEl.classList.remove('show'); okEl.style.display='none';
+
+  if (cur !== ADMIN_PW)   { errEl.textContent='現在のパスワードが違います'; errEl.classList.add('show'); return; }
+  if (!newPw)             { errEl.textContent='新しいパスワードを入力してください'; errEl.classList.add('show'); return; }
+  if (newPw !== confirm)  { errEl.textContent='新しいパスワードが一致しません'; errEl.classList.add('show'); return; }
+
+  ADMIN_PW = newPw;
+  save();
+  document.getElementById('pw-current').value='';
+  document.getElementById('pw-new').value='';
+  document.getElementById('pw-confirm').value='';
+  okEl.style.display='block';
+  setTimeout(()=>{ okEl.style.display='none'; }, 3000);
 }
 
 // ══ RETEST ══
