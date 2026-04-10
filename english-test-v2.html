@@ -410,15 +410,18 @@ tr:hover td { background: #f8f9fd; }
 
     <!-- Student login -->
     <div id="login-student">
-      <label class="form-label">出席番号</label>
-      <input id="inp-number" class="form-input" type="number" min="1" max="99" placeholder="例: 12" style="margin-bottom:16px">
+      <label class="form-label">名前</label>
+      <input id="inp-name" class="form-input" type="text" placeholder="例: 山田太郎" onkeydown="if(event.key==='Enter')document.getElementById('inp-password').focus()">
 
-      <label class="form-label">パスワード（4桁）<span style="font-size:11px;color:var(--muted);margin-left:4px">02＋出席番号</span></label>
-      <div class="pin-wrap">
-        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p0" oninput="pinNext(0)">
-        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p1" oninput="pinNext(1)">
-        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p2" oninput="pinNext(2)">
-        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p3" oninput="pinNext(3)">
+      <label class="form-label">パスワード</label>
+      <input id="inp-password" class="form-input" type="password" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter')loginStudent()">
+
+      <div style="display:none">
+        <input type="hidden" id="inp-number" value="0">
+        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p0">
+        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p1">
+        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p2">
+        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p3">
       </div>
       <div class="error-msg" id="student-err"></div>
       <button class="btn-primary" onclick="loginStudent()">ログイン</button>
@@ -631,7 +634,7 @@ tr:hover td { background: #f8f9fd; }
 
 <script>
 // ══ STATE ══
-const ADMIN_PW = 'haneda2025'; // 管理者パスワード（変更可）
+const ADMIN_PW = '0000'; // 管理者パスワード（変更可）
 let students = JSON.parse(localStorage.getItem('ets_students') || '[]');
 let tests    = JSON.parse(localStorage.getItem('ets_tests')    || '[]');
 let submissions = JSON.parse(localStorage.getItem('ets_subs')  || '[]');
@@ -681,21 +684,24 @@ function hideErr(id) { document.getElementById(id).classList.remove('show'); }
 
 function loginStudent() {
   hideErr('student-err');
-  const num = parseInt(document.getElementById('inp-number').value);
-  const pin = getPin();
-  if (!num || num < 1) { showErr('student-err', '出席番号を入力してください'); return; }
-  if (pin.length < 4) { showErr('student-err', '4桁のパスワードを入力してください'); return; }
+  const nameInput = document.getElementById('inp-name').value.trim();
+  const pwInput   = document.getElementById('inp-password').value;
+  if (!nameInput) { showErr('student-err', '名前を入力してください'); return; }
+  if (!pwInput)   { showErr('student-err', 'パスワードを入力してください'); return; }
 
-  const expectedPw = '02' + String(num).padStart(2, '0');
-  if (pin !== expectedPw) {
-    showErr('student-err', 'パスワードが違います。パスワードは「02＋出席番号2桁」です');
-    ['p0','p1','p2','p3'].forEach(id => document.getElementById(id).value='');
-    document.getElementById('p0').focus();
+  // 登録済み生徒から名前で検索
+  const st = students.find(s => s.name === nameInput);
+  if (!st) { showErr('student-err', '名前が登録されていません。管理者に確認してください'); return; }
+
+  const expectedPw = '02' + String(st.number).padStart(2, '0');
+  if (pwInput !== expectedPw) {
+    showErr('student-err', 'パスワードが違います');
+    document.getElementById('inp-password').value = '';
+    document.getElementById('inp-password').focus();
     return;
   }
 
-  const st = students.find(s => s.number === num);
-  currentUser = { number: num, name: st ? st.name : `出席${num}番` };
+  currentUser = { number: st.number, name: st.name };
   document.getElementById('user-chip-select').textContent = currentUser.name;
   document.getElementById('user-chip-input').textContent  = currentUser.name;
   renderTestList();
@@ -713,7 +719,8 @@ function loginAdmin() {
 function logout() {
   currentUser = null; selectedTestId = null; capturedPhoto = null;
   ['p0','p1','p2','p3'].forEach(id => document.getElementById(id).value='');
-  document.getElementById('inp-number').value='';
+  document.getElementById('inp-name').value='';
+  document.getElementById('inp-password').value='';
   document.getElementById('inp-admin-pw').value='';
   hideErr('student-err'); hideErr('admin-err');
   showScreen('screen-login');
@@ -1070,16 +1077,56 @@ function renderStudents() {
     <tbody>${[...students].sort((a,b)=>a.number-b.number).map(s=>{
       const pw='02'+String(s.number).padStart(2,'0');
       const subCount=submissions.filter(x=>x.studentNumber===s.number).length;
-      return `<tr>
+      return `<tr id="srow-${s.number}">
         <td style="font-family:var(--mono);font-weight:700">${s.number}番</td>
-        <td style="font-weight:700">${s.name}</td>
+        <td>
+          <span id="sname-display-${s.number}" style="font-weight:700">${s.name}</span>
+          <input id="sname-input-${s.number}" class="form-input" type="text" value="${s.name}"
+            style="display:none;margin:0;padding:7px 10px;font-size:13px;width:140px"
+            onkeydown="if(event.key==='Enter')saveStudentName(${s.number});if(event.key==='Escape')cancelEditName(${s.number})">
+        </td>
         <td><code style="background:var(--bg);padding:3px 8px;border-radius:5px;font-size:13px">${pw}</code></td>
         <td>${subCount}件</td>
-        <td><button class="btn-sm btn-red" onclick="deleteStudent(${s.number})">削除</button></td>
+        <td style="display:flex;gap:6px;align-items:center">
+          <button id="sedit-btn-${s.number}" class="btn-sm btn-ghost" onclick="startEditName(${s.number})">✏️ 編集</button>
+          <button id="ssave-btn-${s.number}" class="btn-sm btn-navy" style="display:none" onclick="saveStudentName(${s.number})">保存</button>
+          <button id="scancel-btn-${s.number}" class="btn-sm btn-ghost" style="display:none" onclick="cancelEditName(${s.number})">取消</button>
+          <button class="btn-sm btn-red" onclick="deleteStudent(${s.number})">削除</button>
+        </td>
       </tr>`;
     }).join('')}
     </tbody>
   </table></div>`;
+}
+
+function startEditName(num) {
+  document.getElementById('sname-display-'+num).style.display='none';
+  document.getElementById('sname-input-'+num).style.display='';
+  document.getElementById('sedit-btn-'+num).style.display='none';
+  document.getElementById('ssave-btn-'+num).style.display='';
+  document.getElementById('scancel-btn-'+num).style.display='';
+  document.getElementById('sname-input-'+num).focus();
+  document.getElementById('sname-input-'+num).select();
+}
+
+function cancelEditName(num) {
+  const s = students.find(x=>x.number===num);
+  document.getElementById('sname-input-'+num).value = s ? s.name : '';
+  document.getElementById('sname-display-'+num).style.display='';
+  document.getElementById('sname-input-'+num).style.display='none';
+  document.getElementById('sedit-btn-'+num).style.display='';
+  document.getElementById('ssave-btn-'+num).style.display='none';
+  document.getElementById('scancel-btn-'+num).style.display='none';
+}
+
+function saveStudentName(num) {
+  const newName = document.getElementById('sname-input-'+num).value.trim();
+  if (!newName) { alert('氏名を入力してください'); return; }
+  const s = students.find(x=>x.number===num);
+  if (!s) return;
+  s.name = newName;
+  save();
+  renderStudents();
 }
 
 function addStudent() {
