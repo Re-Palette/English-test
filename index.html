@@ -446,6 +446,14 @@ tr:hover td { background: #f8f9fd; }
     <button class="logout-btn" onclick="logout()">ログアウト</button>
   </div>
   <div style="padding:20px">
+
+    <!-- 自分の成績サマリー -->
+    <div id="my-stats-card" style="display:none" class="section-card">
+      <div class="section-title">📊 自分の成績</div>
+      <div id="my-stats-summary" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"></div>
+      <div id="my-stats-list"></div>
+    </div>
+
     <div class="section-card">
       <div class="section-title">受けたテストを選んでください</div>
       <div id="test-list"></div>
@@ -774,19 +782,97 @@ function logout() {
 function renderTestList() {
   const el = document.getElementById('test-list');
   const noEl = document.getElementById('no-tests');
-  if (!tests.length) { el.innerHTML=''; noEl.style.display=''; return; }
-  noEl.style.display='none';
-  el.innerHTML = tests.sort((a,b)=>b.date.localeCompare(a.date)).map(t => {
-    const already = submissions.find(s => s.testId===t.id && s.studentNumber===currentUser.number);
-    const alreadyBadge = already ? `<span class="badge badge-blue" style="font-size:10px;margin-left:6px">提出済</span>` : '';
-    return `<div class="test-card" id="tc-${t.id}" onclick="selectTest(${t.id})">
-      <div class="test-card-dot" id="dot-${t.id}"></div>
-      <div>
-        <div class="test-name">${t.name}${alreadyBadge}</div>
-        <div class="test-meta">${t.date} · 満点${t.maxScore}点</div>
+  if (!tests.length) { el.innerHTML=''; noEl.style.display=''; }
+  else {
+    noEl.style.display='none';
+    el.innerHTML = tests.sort((a,b)=>b.date.localeCompare(a.date)).map(t => {
+      const already = submissions.find(s => s.testId===t.id && s.studentNumber===currentUser.number && !s.isRetest);
+      const alreadyBadge = already ? `<span class="badge badge-blue" style="font-size:10px;margin-left:6px">提出済</span>` : '';
+      return `<div class="test-card" id="tc-${t.id}" onclick="selectTest(${t.id})">
+        <div class="test-card-dot" id="dot-${t.id}"></div>
+        <div>
+          <div class="test-name">${t.name}${alreadyBadge}</div>
+          <div class="test-meta">${t.date} · 満点${t.maxScore}点</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  renderMyStats();
+}
+
+function renderMyStats() {
+  const myNum = currentUser.number;
+  // 自分の通常提出（再テスト除く）
+  const mySubs = submissions.filter(s => s.studentNumber===myNum && !s.isRetest);
+  const statsCard = document.getElementById('my-stats-card');
+  if (!mySubs.length) { statsCard.style.display='none'; return; }
+  statsCard.style.display='';
+
+  // 全体平均
+  const totalAvg = mySubs.length
+    ? Math.round(mySubs.reduce((a,s)=>a+s.pct,0)/mySubs.length)
+    : 0;
+  const passCount = mySubs.filter(s=>!s.needsRetest).length;
+
+  document.getElementById('my-stats-summary').innerHTML = `
+    <div class="stat-box" style="flex:1;min-width:90px">
+      <div class="stat-num" style="font-size:22px">${mySubs.length}</div>
+      <div class="stat-label">提出済テスト</div>
+    </div>
+    <div class="stat-box" style="flex:1;min-width:90px">
+      <div class="stat-num" style="font-size:22px;color:${totalAvg>=80?'var(--green)':'var(--red)'}">${totalAvg}%</div>
+      <div class="stat-label">自分の平均</div>
+    </div>
+    <div class="stat-box" style="flex:1;min-width:90px">
+      <div class="stat-num" style="font-size:22px;color:var(--green)">${passCount}</div>
+      <div class="stat-label">合格数</div>
+    </div>
+    <div class="stat-box" style="flex:1;min-width:90px">
+      <div class="stat-num" style="font-size:22px;color:var(--red)">${mySubs.length-passCount}</div>
+      <div class="stat-label">再テスト数</div>
+    </div>
+  `;
+
+  // テストごとの詳細（順位付き）
+  const rows = mySubs.sort((a,b)=>b.submittedAt.localeCompare(a.submittedAt)).map(s => {
+    const allForTest = submissions.filter(x=>x.testId===s.testId && !x.isRetest);
+    const rank = allForTest.filter(x=>x.score>s.score).length + 1;
+    const total = allForTest.length;
+    const classAvg = total ? Math.round(allForTest.reduce((a,x)=>a+x.pct,0)/total) : 0;
+    const medal = rank===1?'medal-1':rank===2?'medal-2':rank===3?'medal-3':'medal-n';
+    const bar = s.pct>=80?'var(--green)':s.pct>=60?'#c08000':'var(--red)';
+
+    // 再テスト結果があれば表示
+    const retest = submissions.find(x=>x.testId===s.testId && x.studentNumber===myNum && x.isRetest);
+    const retestRow = retest
+      ? `<div style="margin-top:6px;padding:6px 10px;background:var(--blue-pale);border-radius:8px;font-size:12px;color:var(--blue);font-weight:600">
+           🔄 再テスト: ${retest.score}/${retest.maxScore}点 (${retest.pct}%) ${retest.needsRetest?'⚠️':'✅'}
+         </div>`
+      : '';
+
+    return `<div style="padding:12px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="flex:1;min-width:120px">
+          <div style="font-weight:700;font-size:13px">${s.testName}</div>
+          <div style="font-size:11px;color:var(--muted)">${s.date}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="rank-medal ${medal}" style="font-size:12px">${rank}</span>
+          <span style="font-size:11px;color:var(--muted)">/${total}人</span>
+          <span style="font-weight:700;color:${bar};font-family:var(--mono)">${s.score}/${s.maxScore}</span>
+          <span style="font-weight:700;color:${bar}">${s.pct}%</span>
+          <span style="font-size:11px;color:var(--muted)">クラス平均 ${classAvg}%</span>
+          ${s.needsRetest?'<span class="badge badge-red">再テスト</span>':'<span class="badge badge-green">✓ 合格</span>'}
+        </div>
       </div>
+      <div style="margin-top:7px">
+        <div class="progress-bg"><div class="progress-fill" style="width:${s.pct}%;background:${bar}"></div></div>
+      </div>
+      ${retestRow}
     </div>`;
   }).join('');
+
+  document.getElementById('my-stats-list').innerHTML = rows;
 }
 
 function selectTest(id) {
@@ -1126,7 +1212,7 @@ function renderRanking() {
           <td style="font-weight:700;color:${bar}">${s.pct}%</td>
           <td style="min-width:90px"><div class="progress-bg"><div class="progress-fill" style="width:${s.pct}%;background:${bar}"></div></div></td>
           <td>${s.needsRetest?'<span class="badge badge-red">再テスト</span>':'<span class="badge badge-green">✓ 合格</span>'}</td>
-          <td><button class="thumb-btn" onclick="showPhoto(${JSON.stringify(s.photoDataURL)}, '${s.studentName}')">📷 表示</button></td>
+          <td><button class="thumb-btn" onclick="showPhoto(${s.id}, '${s.studentName}')">📷 表示</button></td>
         </tr>`;
       }).join('')}
       </tbody>
@@ -1166,7 +1252,7 @@ function renderHistory() {
             <td><span class="badge ${s.pct>=80?'badge-green':s.pct>=60?'badge-gold':'badge-red'}">${s.pct}%</span></td>
             <td>${s.needsRetest?'<span class="badge badge-red">再テスト</span>':'<span class="badge badge-green">✓ 合格</span>'}</td>
             <td style="font-size:12px;color:var(--muted)">${new Date(s.submittedAt).toLocaleString('ja')}</td>
-            <td><button class="thumb-btn" onclick="showPhoto(${JSON.stringify(s.photoDataURL)},'${s.studentName}')">📷</button></td>
+            <td><button class="thumb-btn" onclick="showPhoto(${s.id},'${s.studentName}')">📷</button></td>
           </tr>`).join('')}
         </tbody>
       </table></div>
@@ -1222,7 +1308,7 @@ function openCalDay(dateStr) {
         <span style="font-family:var(--mono);color:var(--muted);font-size:12px">${s.studentNumber}番</span>
         <span style="font-weight:700;flex:1">${s.studentName}</span>
         <span class="badge ${s.pct>=80?'badge-green':'badge-red'}">${s.pct}%</span>
-        <button class="thumb-btn btn-sm" onclick="showPhoto(${JSON.stringify(s.photoDataURL)},'${s.studentName}')">📷</button>
+        <button class="thumb-btn btn-sm" onclick="showPhoto(${s.id},'${s.studentName}')">📷</button>
       </div>`).join('')}
     </div>`).join('');
   document.getElementById('cal-modal').classList.add('open');
@@ -1305,9 +1391,11 @@ function deleteStudent(num) {
   save(); renderStudents();
 }
 
-function showPhoto(dataURL, name) {
+function showPhoto(subId, name) {
+  const sub = submissions.find(s => s.id === subId);
+  if (!sub || !sub.photoDataURL) { alert('写真データがありません'); return; }
   document.getElementById('photo-modal-title').textContent=`📷 ${name} の答案写真`;
-  document.getElementById('photo-modal-img').src=dataURL;
+  document.getElementById('photo-modal-img').src=sub.photoDataURL;
   document.getElementById('photo-modal').classList.add('open');
 }
 
