@@ -507,10 +507,33 @@ tr:hover td { background: #f8f9fd; }
 <div id="screen-success" class="screen">
   <div style="padding:20px">
     <div class="success-wrap">
-      <div class="success-icon">✅</div>
-      <div class="success-title">提出完了！</div>
+      <div class="success-icon" id="success-icon">✅</div>
+      <div class="success-title" id="success-title">提出完了！</div>
       <div class="success-sub" id="success-msg"></div>
-      <button class="btn-primary" style="margin-top:32px;max-width:240px;margin-left:auto;margin-right:auto;display:block" onclick="logout()">
+
+      <!-- 再テスト送信エリア（再テスト対象のみ表示） -->
+      <div id="retest-area" style="display:none;margin-top:28px;background:var(--red-pale);border:1.5px solid #f5c6c6;border-radius:14px;padding:20px">
+        <div style="font-weight:700;color:var(--red);margin-bottom:6px;font-size:15px">⚠️ 再テストの成績を入力してください</div>
+        <div style="font-size:13px;color:var(--ink2);margin-bottom:16px">再テスト結果を送信してからログアウトできます。</div>
+        <div class="score-input-wrap" style="margin-bottom:12px">
+          <input id="retest-score-input" class="score-big" type="number" min="0" placeholder="0" oninput="updateRetestPct()">
+          <span class="score-max" id="retest-score-max-label">/100</span>
+        </div>
+        <div class="score-pct" id="retest-pct-display" style="color:var(--muted);margin-bottom:16px">—</div>
+
+        <div class="photo-zone" id="retest-photo-zone" onclick="document.getElementById('retest-photo-file').click()" style="margin-bottom:16px">
+          <div class="photo-zone-icon" id="retest-photo-icon">📷</div>
+          <div class="photo-zone-text" id="retest-photo-text">再テストの答案を撮影・選択</div>
+          <div class="photo-zone-sub">必ず再テストの答案を撮影してください</div>
+          <img id="retest-photo-preview" class="photo-preview-img" alt="再テスト答案プレビュー">
+        </div>
+        <input id="retest-photo-file" type="file" accept="image/*" capture="environment" style="display:none" onchange="handleRetestPhoto(this)">
+
+        <div class="error-msg" id="retest-err"></div>
+        <button class="submit-btn" onclick="submitRetest()" style="background:var(--red)">再テストを送信する →</button>
+      </div>
+
+      <button id="logout-btn-success" class="btn-primary" style="margin-top:24px;max-width:240px;margin-left:auto;margin-right:auto;display:block" onclick="logout()">
         ログアウト
       </button>
     </div>
@@ -832,10 +855,104 @@ function submitScore() {
   submissions.push(sub);
   save();
 
-  const retestMsg = sub.needsRetest ? `\n⚠️ 点数が${t.threshold}%を下回っているため、再テストがあります。` : `\n✅ 合格ラインを超えています！`;
+  const retestMsg = sub.needsRetest
+    ? `⚠️ 点数が${t.threshold}%を下回っているため、再テストがあります。`
+    : `✅ 合格ラインを超えています！`;
+  document.getElementById('success-icon').textContent = sub.needsRetest ? '⚠️' : '✅';
+  document.getElementById('success-title').textContent = sub.needsRetest ? '提出完了 — 再テストあり' : '提出完了！';
   document.getElementById('success-msg').innerHTML =
     `<strong>${currentUser.name}</strong>さんの「${t.name}」<br>${score}/${t.maxScore}点 (${pct}%)<br>${retestMsg}`;
+
+  if (sub.needsRetest) {
+    // 再テストエリアを表示、ログアウトボタンを無効化
+    document.getElementById('retest-area').style.display = '';
+    document.getElementById('logout-btn-success').disabled = true;
+    document.getElementById('logout-btn-success').textContent = '再テストを送信後にログアウトできます';
+    document.getElementById('retest-score-max-label').textContent = '/' + t.maxScore;
+    document.getElementById('retest-score-input').value = '';
+    document.getElementById('retest-score-input').max = t.maxScore;
+    document.getElementById('retest-pct-display').textContent = '—';
+    document.getElementById('retest-pct-display').style.color = 'var(--muted)';
+    document.getElementById('retest-photo-preview').style.display = 'none';
+    document.getElementById('retest-photo-zone').classList.remove('has-photo');
+    document.getElementById('retest-photo-icon').textContent = '📷';
+    document.getElementById('retest-photo-text').textContent = '再テストの答案を撮影・選択';
+    document.getElementById('retest-photo-file').value = '';
+    retestCapturedPhoto = null;
+    hideErr('retest-err');
+  } else {
+    document.getElementById('retest-area').style.display = 'none';
+    document.getElementById('logout-btn-success').disabled = false;
+    document.getElementById('logout-btn-success').textContent = 'ログアウト';
+  }
   showScreen('screen-success');
+}
+
+// ══ RETEST ══
+let retestCapturedPhoto = null;
+
+function updateRetestPct() {
+  const t = tests.find(x => x.id===selectedTestId);
+  if (!t) return;
+  const v = parseFloat(document.getElementById('retest-score-input').value);
+  const pct = isNaN(v) ? null : Math.round(v/t.maxScore*100);
+  const el = document.getElementById('retest-pct-display');
+  if (pct===null) { el.textContent='—'; el.style.color='var(--muted)'; return; }
+  const color = pct>=80?'var(--green)':pct>=60?'#c08000':'var(--red)';
+  el.textContent = pct+'% '+(pct>=t.threshold?'✓ 合格ライン超え':'⚠ まだ再テスト対象');
+  el.style.color = color;
+}
+
+function handleRetestPhoto(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    retestCapturedPhoto = e.target.result;
+    const prev = document.getElementById('retest-photo-preview');
+    prev.src = retestCapturedPhoto; prev.style.display='block';
+    document.getElementById('retest-photo-zone').classList.add('has-photo');
+    document.getElementById('retest-photo-icon').textContent='✅';
+    document.getElementById('retest-photo-text').textContent='写真が選択されました';
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitRetest() {
+  hideErr('retest-err');
+  const t = tests.find(x => x.id===selectedTestId);
+  if (!t) return;
+  const scoreVal = document.getElementById('retest-score-input').value;
+  if (scoreVal===''||scoreVal===null) { showErr('retest-err','再テストの点数を入力してください'); return; }
+  const score = parseFloat(scoreVal);
+  if (isNaN(score)||score<0||score>t.maxScore) { showErr('retest-err',`0〜${t.maxScore}の範囲で入力してください`); return; }
+  if (!retestCapturedPhoto) { showErr('retest-err','再テストの答案写真を撮影してください'); return; }
+
+  const pct = Math.round(score/t.maxScore*100);
+  const sub = {
+    id: Date.now(),
+    testId: t.id,
+    testName: t.name + '【再テスト】',
+    studentNumber: currentUser.number,
+    studentName: currentUser.name,
+    score, maxScore: t.maxScore, threshold: t.threshold,
+    pct,
+    needsRetest: pct < t.threshold,
+    photoDataURL: retestCapturedPhoto,
+    submittedAt: new Date().toISOString(),
+    date: t.date,
+    isRetest: true
+  };
+  submissions.push(sub);
+  save();
+
+  document.getElementById('retest-area').style.display = 'none';
+  document.getElementById('logout-btn-success').disabled = false;
+  document.getElementById('logout-btn-success').textContent = 'ログアウト';
+  document.getElementById('success-icon').textContent = '✅';
+  document.getElementById('success-title').textContent = '再テスト提出完了！';
+  const result = pct >= t.threshold ? '✅ 合格！お疲れ様でした。' : '⚠️ 再度先生に確認してもらってください。';
+  document.getElementById('success-msg').innerHTML =
+    `<strong>${currentUser.name}</strong>さんの再テスト「${t.name}」<br>${score}/${t.maxScore}点 (${pct}%)<br>${result}`;
 }
 
 // ══ ADMIN ══
