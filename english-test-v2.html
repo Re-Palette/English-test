@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>英語テスト 成績入力</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --ink: #0f1117;
+  --ink2: #3a3f52;
+  --muted: #8891aa;
+  --bg: #f0f2f7;
+  --surface: #ffffff;
+  --border: #e0e4ef;
+  --navy: #1b2952;
+  --navy2: #253470;
+  --gold: #c8a84b;
+  --gold-pale: #faf3e0;
+  --red: #c94040;
+  --red-pale: #fdf0f0;
+  --green: #2a7a52;
+  --green-pale: #edf7f2;
+  --blue: #2555b8;
+  --blue-pale: #eef2fc;
+  --font: 'Noto Sans JP', sans-serif;
+  --mono: 'DM Mono', monospace;
+  --radius: 14px;
+  --shadow: 0 4px 24px rgba(15,17,40,0.10);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; width: 100%; max-width: 480px; padding: 24px 20px 48px; }
+.screen.active { display: block; }
+.screen-wide { max-width: 1000px; }
+
+/* ── LOGIN ── */
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+.login-logo {
+  width: 64px; height: 64px;
+  background: var(--navy);
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 32px rgba(27,41,82,0.25);
+}
+.login-title {
+  font-size: 22px; font-weight: 700;
+  color: var(--navy); text-align: center; margin-bottom: 4px;
+}
+.login-sub {
+  font-size: 13px; color: var(--muted);
+  text-align: center; margin-bottom: 32px;
+}
+.login-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 28px 24px;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 360px;
+}
+.login-tabs {
+  display: flex; background: var(--bg);
+  border-radius: 10px; padding: 4px;
+  margin-bottom: 24px;
+}
+.login-tab {
+  flex: 1; padding: 9px;
+  border: none; background: none;
+  font-family: var(--font); font-size: 13px; font-weight: 600;
+  color: var(--muted); border-radius: 8px; cursor: pointer; transition: .15s;
+}
+.login-tab.active { background: var(--surface); color: var(--navy); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+.form-label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .6px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+.form-input {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 15px; font-family: var(--font);
+  color: var(--ink); background: var(--bg);
+  transition: .15s; margin-bottom: 16px;
+}
+.form-input:focus { outline: none; border-color: var(--navy); background: white; box-shadow: 0 0 0 3px rgba(27,41,82,0.08); }
+
+/* PIN input */
+.pin-wrap { display: flex; gap: 10px; margin-bottom: 16px; }
+.pin-digit {
+  flex: 1; height: 56px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 22px; font-weight: 700; font-family: var(--mono);
+  text-align: center; color: var(--navy);
+  background: var(--bg); transition: .15s;
+}
+.pin-digit:focus { outline: none; border-color: var(--navy); background: white; box-shadow: 0 0 0 3px rgba(27,41,82,0.08); }
+
+.btn-primary {
+  width: 100%; padding: 14px;
+  background: var(--navy); color: white;
+  border: none; border-radius: 10px;
+  font-size: 15px; font-weight: 700; font-family: var(--font);
+  cursor: pointer; transition: .15s;
+}
+.btn-primary:hover { background: var(--navy2); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(27,41,82,0.2); }
+.btn-primary:active { transform: none; }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.error-msg { background: var(--red-pale); color: var(--red); border: 1px solid #f5c6c6; border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 16px; display: none; }
+.error-msg.show { display: block; }
+
+/* ── STUDENT SCREEN ── */
+.page-header {
+  background: var(--navy);
+  color: white;
+  padding: 16px 20px;
+  display: flex; align-items: center; gap: 12px;
+  position: sticky; top: 0; z-index: 50;
+}
+.page-header h1 { font-size: 15px; font-weight: 700; flex: 1; }
+.user-chip {
+  background: rgba(255,255,255,0.15);
+  border-radius: 99px; padding: 4px 12px;
+  font-size: 12px; font-weight: 600;
+}
+.logout-btn {
+  background: none; border: 1px solid rgba(255,255,255,0.3);
+  color: white; border-radius: 8px; padding: 5px 12px;
+  font-size: 12px; font-family: var(--font); cursor: pointer; transition: .15s;
+}
+.logout-btn:hover { background: rgba(255,255,255,0.1); }
+
+.section-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.section-title {
+  font-size: 13px; font-weight: 700; color: var(--navy);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.section-title::before {
+  content: ''; display: inline-block;
+  width: 3px; height: 14px;
+  background: var(--gold); border-radius: 2px;
+}
+
+/* Test selector */
+.test-card {
+  border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 14px 16px;
+  margin-bottom: 10px; cursor: pointer; transition: .15s;
+  display: flex; align-items: center; gap: 12px;
+}
+.test-card:hover { border-color: var(--navy); background: var(--blue-pale); }
+.test-card.selected { border-color: var(--navy); background: var(--blue-pale); }
+.test-card-dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--border); flex-shrink: 0; transition: .15s;
+}
+.test-card.selected .test-card-dot { background: var(--navy); border-color: var(--navy); }
+.test-name { font-weight: 700; font-size: 14px; }
+.test-meta { font-size: 12px; color: var(--muted); }
+
+/* Score input */
+.score-input-wrap { position: relative; }
+.score-big {
+  width: 100%; padding: 16px 60px 16px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px; font-size: 28px;
+  font-weight: 700; font-family: var(--mono);
+  color: var(--navy); text-align: center;
+  background: var(--bg); transition: .15s;
+}
+.score-big:focus { outline: none; border-color: var(--navy); background: white; box-shadow: 0 0 0 3px rgba(27,41,82,0.08); }
+.score-max { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--muted); font-weight: 600; }
+.score-pct {
+  text-align: center; font-size: 18px; font-weight: 700;
+  margin-top: 10px; transition: .2s;
+}
+
+/* Photo area */
+.photo-zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px; padding: 28px 20px;
+  text-align: center; cursor: pointer;
+  transition: .15s; background: var(--bg);
+  position: relative;
+}
+.photo-zone:hover { border-color: var(--navy); background: #eef1f8; }
+.photo-zone.has-photo { border-style: solid; border-color: var(--green); background: var(--green-pale); }
+.photo-zone-icon { font-size: 36px; margin-bottom: 8px; }
+.photo-zone-text { font-size: 14px; color: var(--muted); font-weight: 600; }
+.photo-zone-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.photo-preview-img {
+  width: 100%; border-radius: 10px;
+  max-height: 240px; object-fit: cover;
+  display: none; margin-top: 14px;
+  border: 1px solid var(--border);
+}
+.required-badge {
+  display: inline-block; background: var(--red); color: white;
+  font-size: 10px; font-weight: 700; padding: 2px 7px;
+  border-radius: 99px; vertical-align: middle; margin-left: 6px;
+}
+.ok-badge {
+  display: inline-block; background: var(--green); color: white;
+  font-size: 10px; font-weight: 700; padding: 2px 7px;
+  border-radius: 99px; vertical-align: middle; margin-left: 6px;
+}
+
+/* Submit */
+.submit-btn {
+  width: 100%; padding: 16px;
+  background: var(--navy); color: white;
+  border: none; border-radius: 12px;
+  font-size: 16px; font-weight: 700; font-family: var(--font);
+  cursor: pointer; transition: .2s;
+  box-shadow: 0 4px 16px rgba(27,41,82,0.2);
+}
+.submit-btn:hover:not(:disabled) { background: var(--navy2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,41,82,0.25); }
+.submit-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* Success screen */
+.success-wrap { text-align: center; padding: 48px 20px; }
+.success-icon { font-size: 72px; margin-bottom: 16px; animation: pop .4s cubic-bezier(.17,.67,.35,1.3); }
+@keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.success-title { font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.success-sub { color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+/* ── ADMIN ── */
+.admin-header {
+  background: var(--ink);
+  color: white;
+  padding: 0;
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.3);
+}
+.admin-header-inner { display: flex; align-items: center; gap: 12px; padding: 14px 20px; }
+.admin-header h1 { font-size: 16px; font-weight: 700; flex: 1; color: var(--gold); }
+.admin-nav { display: flex; background: rgba(255,255,255,0.07); overflow-x: auto; }
+.admin-nav-btn {
+  background: none; border: none; border-bottom: 3px solid transparent;
+  color: rgba(255,255,255,0.6); padding: 10px 18px;
+  font-size: 13px; font-family: var(--font); font-weight: 600;
+  cursor: pointer; white-space: nowrap; transition: .15s;
+}
+.admin-nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+.admin-nav-btn:hover:not(.active) { color: white; }
+
+.admin-page { display: none; padding: 24px 20px; max-width: 1000px; margin: 0 auto; }
+.admin-page.active { display: block; }
+
+/* Stats */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 12px; margin-bottom: 24px; }
+.stat-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px; text-align: center;
+}
+.stat-num { font-size: 26px; font-weight: 700; color: var(--navy); font-family: var(--mono); }
+.stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 600; }
+
+/* Table */
+.tbl-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: var(--ink); color: rgba(255,255,255,0.85); padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .4px; white-space: nowrap; }
+td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8f9fd; }
+.rank-medal { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; font-size: 13px; font-weight: 700; }
+.medal-1 { background: #ffd700; color: #5a3e00; }
+.medal-2 { background: #c8c8c8; color: #3a3a3a; }
+.medal-3 { background: #cd7f32; color: #2a1000; }
+.medal-n { background: var(--border); color: var(--muted); font-size: 12px; }
+
+.badge { display: inline-block; padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 700; }
+.badge-green { background: var(--green-pale); color: var(--green); }
+.badge-red { background: var(--red-pale); color: var(--red); }
+.badge-gold { background: var(--gold-pale); color: #7a5a00; }
+.badge-blue { background: var(--blue-pale); color: var(--blue); }
+
+.progress-bg { background: var(--border); border-radius: 99px; height: 7px; min-width: 80px; }
+.progress-fill { height: 100%; border-radius: 99px; }
+
+/* Photo thumb */
+.thumb-btn {
+  background: var(--blue-pale); border: 1px solid #c0d0f0;
+  color: var(--blue); border-radius: 7px; padding: 4px 10px;
+  font-size: 12px; font-family: var(--font); font-weight: 600; cursor: pointer;
+  transition: .12s;
+}
+.thumb-btn:hover { background: #d8e6ff; }
+
+/* Modal */
+.modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6); z-index: 200;
+  align-items: center; justify-content: center; padding: 20px;
+  backdrop-filter: blur(4px);
+}
+.modal-bg.open { display: flex; }
+.modal-box {
+  background: var(--surface); border-radius: 18px;
+  padding: 24px; width: 100%; max-width: 540px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 50%; width: 32px; height: 32px;
+  font-size: 16px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+}
+
+/* Test management */
+.test-manage-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 12px;
+}
+.btn-sm {
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 12px; font-weight: 700; font-family: var(--font);
+  cursor: pointer; border: none; transition: .12s;
+}
+.btn-navy { background: var(--navy); color: white; }
+.btn-navy:hover { background: var(--navy2); }
+.btn-ghost { background: var(--bg); color: var(--ink2); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--border); }
+.btn-red { background: var(--red-pale); color: var(--red); }
+.btn-red:hover { background: #fcd8d8; }
+
+/* Calendar */
+.cal-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.cal-nav h2 { flex: 1; text-align: center; font-size: 16px; font-weight: 700; color: var(--navy); }
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+.cal-weekday { text-align: center; font-size: 11px; font-weight: 700; color: var(--muted); padding: 6px; }
+.cal-cell {
+  min-height: 72px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 6px 5px; cursor: pointer; transition: .12s;
+}
+.cal-cell:hover { border-color: var(--navy); }
+.cal-cell.today { border-color: var(--navy); border-width: 2px; }
+.cal-cell.other { opacity: .3; cursor: default; }
+.cal-cell.other:hover { border-color: var(--border); }
+.cal-num { font-size: 13px; font-weight: 600; color: var(--muted); }
+.cal-dot { font-size: 9px; background: var(--navy); color: white; border-radius: 4px; padding: 1px 4px; margin-top: 2px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.cal-dot.warn { background: var(--red); }
+
+/* Input area for admin test creation */
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.input-group { display: flex; flex-direction: column; gap: 5px; }
+.input-group.full { grid-column: 1/-1; }
+.inp {
+  padding: 9px 12px; border: 1.5px solid var(--border);
+  border-radius: 9px; font-size: 14px; font-family: var(--font);
+  color: var(--ink); background: var(--bg); transition: .15s;
+}
+.inp:focus { outline: none; border-color: var(--navy); background: white; }
+
+@media(max-width:600px){
+  .input-row { grid-template-columns: 1fr; }
+  .admin-page { padding: 16px; }
+  .cal-cell { min-height: 55px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ LOGIN ══════════ -->
+<div id="screen-login" class="screen active">
+<div class="login-wrap">
+  <div class="login-logo">📝</div>
+  <div class="login-title">英語テスト 成績入力</div>
+  <div class="login-sub">羽田国際高等学校</div>
+
+  <div class="login-card">
+    <div class="login-tabs">
+      <button class="login-tab active" onclick="switchLoginTab('student')">生徒ログイン</button>
+      <button class="login-tab" onclick="switchLoginTab('admin')">管理者</button>
+    </div>
+
+    <!-- Student login -->
+    <div id="login-student">
+      <label class="form-label">出席番号</label>
+      <input id="inp-number" class="form-input" type="number" min="1" max="99" placeholder="例: 12" style="margin-bottom:16px">
+
+      <label class="form-label">パスワード（4桁）<span style="font-size:11px;color:var(--muted);margin-left:4px">02＋出席番号</span></label>
+      <div class="pin-wrap">
+        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p0" oninput="pinNext(0)">
+        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p1" oninput="pinNext(1)">
+        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p2" oninput="pinNext(2)">
+        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p3" oninput="pinNext(3)">
+      </div>
+      <div class="error-msg" id="student-err"></div>
+      <button class="btn-primary" onclick="loginStudent()">ログイン</button>
+    </div>
+
+    <!-- Admin login -->
+    <div id="login-admin" style="display:none">
+      <label class="form-label">管理者パスワード</label>
+      <input id="inp-admin-pw" class="form-input" type="password" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter')loginAdmin()">
+      <div class="error-msg" id="admin-err"></div>
+      <button class="btn-primary" onclick="loginAdmin()">管理者としてログイン</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════ STUDENT: SELECT TEST ══════════ -->
+<div id="screen-select" class="screen">
+  <div class="page-header">
+    <h1>📝 テストを選択</h1>
+    <span class="user-chip" id="user-chip-select"></span>
+    <button class="logout-btn" onclick="logout()">ログアウト</button>
+  </div>
+  <div style="padding:20px">
+    <div class="section-card">
+      <div class="section-title">受けたテストを選んでください</div>
+      <div id="test-list"></div>
+      <div id="no-tests" style="display:none;text-align:center;padding:32px;color:var(--muted)">
+        <div style="font-size:36px;margin-bottom:8px">📋</div>
+        テストがまだ登録されていません<br>
+        <span style="font-size:12px">管理者に連絡してください</span>
+      </div>
+    </div>
+    <button class="submit-btn" onclick="goToInput()" id="btn-go-input" disabled style="margin-top:4px">
+      次へ → 点数入力
+    </button>
+  </div>
+</div>
+
+<!-- ══════════ STUDENT: INPUT ══════════ -->
+<div id="screen-input" class="screen">
+  <div class="page-header">
+    <h1>✏️ 点数入力</h1>
+    <span class="user-chip" id="user-chip-input"></span>
+    <button class="logout-btn" onclick="showScreen('screen-select')">← 戻る</button>
+  </div>
+  <div style="padding:20px">
+
+    <div class="section-card">
+      <div class="section-title">テスト情報</div>
+      <div id="selected-test-info"></div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">点数を入力</div>
+      <div class="score-input-wrap">
+        <input id="score-input" class="score-big" type="number" min="0" placeholder="0" oninput="updatePct()">
+        <span class="score-max" id="score-max-label">/100</span>
+      </div>
+      <div class="score-pct" id="score-pct-display" style="color:var(--muted)">—</div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">
+        答案の写真
+        <span id="photo-badge" class="required-badge">必須</span>
+      </div>
+      <div class="photo-zone" id="photo-zone" onclick="document.getElementById('photo-file').click()">
+        <div class="photo-zone-icon" id="photo-icon">📷</div>
+        <div class="photo-zone-text" id="photo-text">タップして答案を撮影・選択</div>
+        <div class="photo-zone-sub" id="photo-sub">JPG・PNG対応 | 必ず自分の答案を撮影してください</div>
+        <img id="photo-preview" class="photo-preview-img" alt="答案プレビュー">
+      </div>
+      <input id="photo-file" type="file" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
+    </div>
+
+    <div class="error-msg" id="input-err"></div>
+    <button class="submit-btn" onclick="submitScore()" id="submit-btn">送信する</button>
+  </div>
+</div>
+
+<!-- ══════════ SUCCESS ══════════ -->
+<div id="screen-success" class="screen">
+  <div style="padding:20px">
+    <div class="success-wrap">
+      <div class="success-icon">✅</div>
+      <div class="success-title">提出完了！</div>
+      <div class="success-sub" id="success-msg"></div>
+      <button class="btn-primary" style="margin-top:32px;max-width:240px;margin-left:auto;margin-right:auto;display:block" onclick="logout()">
+        ログアウト
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ADMIN ══════════ -->
+<div id="screen-admin" class="screen screen-wide" style="padding:0;max-width:100%">
+  <div class="admin-header">
+    <div class="admin-header-inner">
+      <h1>📊 管理者ダッシュボード</h1>
+      <button class="logout-btn" onclick="logout()">ログアウト</button>
+    </div>
+    <div class="admin-nav">
+      <button class="admin-nav-btn active" onclick="adminTab('dash')">ダッシュボード</button>
+      <button class="admin-nav-btn" onclick="adminTab('tests')">テスト管理</button>
+      <button class="admin-nav-btn" onclick="adminTab('ranking')">ランキング</button>
+      <button class="admin-nav-btn" onclick="adminTab('history')">全履歴</button>
+      <button class="admin-nav-btn" onclick="adminTab('calendar')">カレンダー</button>
+      <button class="admin-nav-btn" onclick="adminTab('students')">生徒管理</button>
+    </div>
+  </div>
+
+  <!-- DASH -->
+  <div id="admin-dash" class="admin-page active">
+    <div id="admin-stats" class="stats-grid"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="section-card"><div class="section-title">要再テスト</div><div id="admin-retest"></div></div>
+      <div class="section-card"><div class="section-title">最新の提出</div><div id="admin-recent"></div></div>
+    </div>
+  </div>
+
+  <!-- TESTS -->
+  <div id="admin-tests" class="admin-page">
+    <div class="section-card" style="margin-bottom:16px">
+      <div class="section-title">テストを新規作成</div>
+      <div class="input-row">
+        <div class="input-group"><label class="form-label">テスト名 *</label><input id="t-name" class="inp" placeholder="例: Unit3 期末テスト"></div>
+        <div class="input-group"><label class="form-label">実施日 *</label><input id="t-date" class="inp" type="date"></div>
+        <div class="input-group"><label class="form-label">満点 *</label><input id="t-max" class="inp" type="number" value="100" min="1"></div>
+        <div class="input-group"><label class="form-label">再テスト閾値（%）</label><input id="t-thresh" class="inp" type="number" value="80" min="0" max="100"></div>
+      </div>
+      <button class="btn-sm btn-navy" style="margin-top:14px" onclick="createTest()">＋ テストを追加</button>
+    </div>
+    <div id="test-manage-list"></div>
+  </div>
+
+  <!-- RANKING -->
+  <div id="admin-ranking" class="admin-page">
+    <div class="section-card" style="margin-bottom:16px">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+        <div class="input-group" style="flex:1;min-width:200px"><label class="form-label">テスト</label><select id="rank-sel" class="inp" onchange="renderRanking()"></select></div>
+        <div class="input-group"><label class="form-label">並び順</label><select id="rank-sort" class="inp" onchange="renderRanking()"><option value="desc">高い順</option><option value="asc">低い順</option><option value="name">名前順</option></select></div>
+      </div>
+    </div>
+    <div class="section-card"><div id="ranking-content"></div></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div id="admin-history" class="admin-page">
+    <div class="section-card" style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap">
+      <input id="hist-q" class="inp" style="flex:1;min-width:180px" placeholder="テスト名・生徒名で検索…" oninput="renderHistory()">
+      <select id="hist-f" class="inp" onchange="renderHistory()">
+        <option value="all">すべて</option>
+        <option value="retest">再テストのみ</option>
+        <option value="pass">合格のみ</option>
+      </select>
+    </div>
+    <div id="history-content"></div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div id="admin-calendar" class="admin-page">
+    <div class="section-card">
+      <div class="cal-nav">
+        <button class="btn-sm btn-ghost" onclick="calMove(-1)">◀</button>
+        <h2 id="cal-title"></h2>
+        <button class="btn-sm btn-ghost" onclick="calMove(1)">▶</button>
+        <button class="btn-sm btn-ghost" onclick="calMove(0)">今月</button>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-weekday">日</div><div class="cal-weekday">月</div><div class="cal-weekday">火</div>
+        <div class="cal-weekday">水</div><div class="cal-weekday">木</div><div class="cal-weekday">金</div><div class="cal-weekday">土</div>
+      </div>
+      <div id="cal-cells" class="cal-grid" style="margin-top:4px"></div>
+    </div>
+  </div>
+
+  <!-- STUDENTS -->
+  <div id="admin-students" class="admin-page">
+    <div class="section-card" style="margin-bottom:16px">
+      <div class="section-title">生徒を追加</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input id="s-num" class="inp" type="number" min="1" max="99" placeholder="出席番号" style="width:120px">
+        <input id="s-name" class="inp" placeholder="氏名" style="flex:1;min-width:140px">
+        <button class="btn-sm btn-navy" onclick="addStudent()">追加</button>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px">パスワードは自動的に「02＋出席番号」になります</div>
+    </div>
+    <div class="section-card"><div id="student-table"></div></div>
+  </div>
+</div>
+
+<!-- Photo Modal -->
+<div class="modal-bg" id="photo-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="document.getElementById('photo-modal').classList.remove('open')">✕</button>
+    <div style="font-weight:700;font-size:16px;margin-bottom:14px" id="photo-modal-title"></div>
+    <img id="photo-modal-img" style="width:100%;border-radius:10px" src="" alt="答案">
+  </div>
+</div>
+
+<!-- Cal Day Modal -->
+<div class="modal-bg" id="cal-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="document.getElementById('cal-modal').classList.remove('open')">✕</button>
+    <div style="font-weight:700;font-size:16px;margin-bottom:14px" id="cal-modal-title"></div>
+    <div id="cal-modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ══ STATE ══
+const ADMIN_PW = 'haneda2025'; // 管理者パスワード（変更可）
+let students = JSON.parse(localStorage.getItem('ets_students') || '[]');
+let tests    = JSON.parse(localStorage.getItem('ets_tests')    || '[]');
+let submissions = JSON.parse(localStorage.getItem('ets_subs')  || '[]');
+// submissions: [{id, testId, studentNumber, studentName, score, photoDataURL, submittedAt}]
+
+let currentUser = null; // {number, name}
+let selectedTestId = null;
+let capturedPhoto = null;
+let calY, calM;
+const today = new Date();
+calY = today.getFullYear(); calM = today.getMonth();
+
+function save() {
+  localStorage.setItem('ets_students', JSON.stringify(students));
+  localStorage.setItem('ets_tests', JSON.stringify(tests));
+  localStorage.setItem('ets_subs', JSON.stringify(submissions));
+}
+
+// ══ SCREEN ══
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ══ LOGIN ══
+function switchLoginTab(tab) {
+  document.querySelectorAll('.login-tab').forEach((b,i) => b.classList.toggle('active', (i===0&&tab==='student')||(i===1&&tab==='admin')));
+  document.getElementById('login-student').style.display = tab==='student' ? '' : 'none';
+  document.getElementById('login-admin').style.display   = tab==='admin'   ? '' : 'none';
+}
+
+function pinNext(idx) {
+  const el = document.getElementById('p'+idx);
+  if (el.value.length === 1 && idx < 3) document.getElementById('p'+(idx+1)).focus();
+}
+
+function getPin() {
+  return ['p0','p1','p2','p3'].map(id => document.getElementById(id).value).join('');
+}
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.classList.add('show');
+}
+function hideErr(id) { document.getElementById(id).classList.remove('show'); }
+
+function loginStudent() {
+  hideErr('student-err');
+  const num = parseInt(document.getElementById('inp-number').value);
+  const pin = getPin();
+  if (!num || num < 1) { showErr('student-err', '出席番号を入力してください'); return; }
+  if (pin.length < 4) { showErr('student-err', '4桁のパスワードを入力してください'); return; }
+
+  const expectedPw = '02' + String(num).padStart(2, '0');
+  if (pin !== expectedPw) {
+    showErr('student-err', 'パスワードが違います。パスワードは「02＋出席番号2桁」です');
+    ['p0','p1','p2','p3'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('p0').focus();
+    return;
+  }
+
+  const st = students.find(s => s.number === num);
+  currentUser = { number: num, name: st ? st.name : `出席${num}番` };
+  document.getElementById('user-chip-select').textContent = currentUser.name;
+  document.getElementById('user-chip-input').textContent  = currentUser.name;
+  renderTestList();
+  showScreen('screen-select');
+}
+
+function loginAdmin() {
+  hideErr('admin-err');
+  const pw = document.getElementById('inp-admin-pw').value;
+  if (pw !== ADMIN_PW) { showErr('admin-err', 'パスワードが違います'); return; }
+  renderAdminDash();
+  showScreen('screen-admin');
+}
+
+function logout() {
+  currentUser = null; selectedTestId = null; capturedPhoto = null;
+  ['p0','p1','p2','p3'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('inp-number').value='';
+  document.getElementById('inp-admin-pw').value='';
+  hideErr('student-err'); hideErr('admin-err');
+  showScreen('screen-login');
+}
+
+// ══ STUDENT: SELECT ══
+function renderTestList() {
+  const el = document.getElementById('test-list');
+  const noEl = document.getElementById('no-tests');
+  if (!tests.length) { el.innerHTML=''; noEl.style.display=''; return; }
+  noEl.style.display='none';
+  el.innerHTML = tests.sort((a,b)=>b.date.localeCompare(a.date)).map(t => {
+    const already = submissions.find(s => s.testId===t.id && s.studentNumber===currentUser.number);
+    const alreadyBadge = already ? `<span class="badge badge-blue" style="font-size:10px;margin-left:6px">提出済</span>` : '';
+    return `<div class="test-card" id="tc-${t.id}" onclick="selectTest(${t.id})">
+      <div class="test-card-dot" id="dot-${t.id}"></div>
+      <div>
+        <div class="test-name">${t.name}${alreadyBadge}</div>
+        <div class="test-meta">${t.date} · 満点${t.maxScore}点</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectTest(id) {
+  selectedTestId = id;
+  document.querySelectorAll('.test-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.test-card-dot').forEach(d => { d.style.background=''; d.style.borderColor=''; });
+  document.getElementById('tc-'+id)?.classList.add('selected');
+  document.getElementById('btn-go-input').disabled = false;
+}
+
+function goToInput() {
+  if (!selectedTestId) return;
+  const t = tests.find(x => x.id===selectedTestId);
+  if (!t) return;
+  capturedPhoto = null;
+  document.getElementById('score-input').value = '';
+  document.getElementById('photo-preview').style.display='none';
+  document.getElementById('photo-preview').src='';
+  document.getElementById('photo-zone').classList.remove('has-photo');
+  document.getElementById('photo-icon').textContent='📷';
+  document.getElementById('photo-text').textContent='タップして答案を撮影・選択';
+  document.getElementById('photo-sub').textContent='JPG・PNG対応 | 必ず自分の答案を撮影してください';
+  document.getElementById('photo-badge').className='required-badge';
+  document.getElementById('photo-badge').textContent='必須';
+  document.getElementById('score-max-label').textContent='/'+t.maxScore;
+  document.getElementById('selected-test-info').innerHTML =
+    `<div style="font-weight:700;font-size:15px">${t.name}</div>
+     <div style="color:var(--muted);font-size:13px;margin-top:4px">${t.date} · 満点${t.maxScore}点 · 合格ライン${t.threshold}%以上</div>`;
+  updatePct();
+  hideErr('input-err');
+  showScreen('screen-input');
+}
+
+function updatePct() {
+  const t = tests.find(x => x.id===selectedTestId);
+  if (!t) return;
+  const v = parseFloat(document.getElementById('score-input').value);
+  const pct = isNaN(v) ? null : Math.round(v/t.maxScore*100);
+  const el = document.getElementById('score-pct-display');
+  if (pct===null) { el.textContent='—'; el.style.color='var(--muted)'; return; }
+  const color = pct>=80?'var(--green)':pct>=60?'#c08000':'var(--red)';
+  el.textContent = pct+'% '+(pct>=t.threshold?'✓ 合格ライン超え':'⚠ 再テスト対象');
+  el.style.color = color;
+}
+
+function handlePhoto(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    capturedPhoto = e.target.result;
+    const prev = document.getElementById('photo-preview');
+    prev.src = capturedPhoto; prev.style.display='block';
+    document.getElementById('photo-zone').classList.add('has-photo');
+    document.getElementById('photo-icon').textContent='✅';
+    document.getElementById('photo-text').textContent='写真が選択されました';
+    document.getElementById('photo-sub').textContent='タップで変更できます';
+    document.getElementById('photo-badge').className='ok-badge';
+    document.getElementById('photo-badge').textContent='OK';
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitScore() {
+  hideErr('input-err');
+  const t = tests.find(x => x.id===selectedTestId);
+  if (!t) return;
+  const scoreVal = document.getElementById('score-input').value;
+  if (scoreVal==='' || scoreVal===null) { showErr('input-err','点数を入力してください'); return; }
+  const score = parseFloat(scoreVal);
+  if (isNaN(score)||score<0||score>t.maxScore) { showErr('input-err',`0〜${t.maxScore}の範囲で入力してください`); return; }
+  if (!capturedPhoto) { showErr('input-err','答案の写真を撮影してください（必須です）'); return; }
+
+  const pct = Math.round(score/t.maxScore*100);
+  const sub = {
+    id: Date.now(),
+    testId: t.id,
+    testName: t.name,
+    studentNumber: currentUser.number,
+    studentName: currentUser.name,
+    score, maxScore: t.maxScore, threshold: t.threshold,
+    pct,
+    needsRetest: pct < t.threshold,
+    photoDataURL: capturedPhoto,
+    submittedAt: new Date().toISOString(),
+    date: t.date
+  };
+  submissions.push(sub);
+  save();
+
+  const retestMsg = sub.needsRetest ? `\n⚠️ 点数が${t.threshold}%を下回っているため、再テストがあります。` : `\n✅ 合格ラインを超えています！`;
+  document.getElementById('success-msg').innerHTML =
+    `<strong>${currentUser.name}</strong>さんの「${t.name}」<br>${score}/${t.maxScore}点 (${pct}%)<br>${retestMsg}`;
+  showScreen('screen-success');
+}
+
+// ══ ADMIN ══
+function adminTab(tab) {
+  document.querySelectorAll('.admin-page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('admin-'+tab).classList.add('active');
+  event.target.classList.add('active');
+  if(tab==='dash') renderAdminDash();
+  if(tab==='ranking') renderRankSel();
+  if(tab==='history') renderHistory();
+  if(tab==='calendar') renderCal();
+  if(tab==='students') renderStudents();
+  if(tab==='tests') renderTestManage();
+}
+
+function renderAdminDash() {
+  const totalTests = tests.length;
+  const totalSubs  = submissions.length;
+  const allPct     = submissions.map(s=>s.pct);
+  const avgPct     = allPct.length ? Math.round(allPct.reduce((a,b)=>a+b,0)/allPct.length) : 0;
+  const retestN    = submissions.filter(s=>s.needsRetest).length;
+  document.getElementById('admin-stats').innerHTML = `
+    <div class="stat-box"><div class="stat-num">${totalTests}</div><div class="stat-label">テスト数</div></div>
+    <div class="stat-box"><div class="stat-num">${students.length}</div><div class="stat-label">登録生徒</div></div>
+    <div class="stat-box"><div class="stat-num">${totalSubs}</div><div class="stat-label">提出数</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:${avgPct>=80?'var(--green)':'var(--red)'}">${avgPct}%</div><div class="stat-label">全体平均</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--red)">${retestN}</div><div class="stat-label">再テスト対象</div></div>
+  `;
+  const retestEl = document.getElementById('admin-retest');
+  const rs = submissions.filter(s=>s.needsRetest);
+  retestEl.innerHTML = rs.length ? rs.slice(0,8).map(s=>
+    `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-weight:700;flex:1">${s.studentName}</span>
+      <span style="font-size:11px;color:var(--muted)">${s.testName}</span>
+      <span class="badge badge-red">${s.pct}%</span>
+    </div>`).join('')+'<div style="margin-top:8px;font-size:12px;color:var(--muted);text-align:right">計${rs.length}件</div>'
+    : '<div style="text-align:center;padding:20px;color:var(--muted)">再テスト対象者なし ✓</div>';
+
+  const recentEl = document.getElementById('admin-recent');
+  const recent = [...submissions].sort((a,b)=>b.submittedAt.localeCompare(a.submittedAt)).slice(0,6);
+  recentEl.innerHTML = recent.length ? recent.map(s=>
+    `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:13px">${s.studentName}</div>
+        <div style="font-size:11px;color:var(--muted)">${s.testName}</div>
+      </div>
+      <span class="badge ${s.pct>=80?'badge-green':'badge-red'}">${s.pct}%</span>
+    </div>`).join('')
+    : '<div style="text-align:center;padding:20px;color:var(--muted)">まだ提出がありません</div>';
+}
+
+function renderTestManage() {
+  document.getElementById('t-date').value = today.toISOString().split('T')[0];
+  const el = document.getElementById('test-manage-list');
+  el.innerHTML = tests.length ? tests.sort((a,b)=>b.date.localeCompare(a.date)).map(t=>{
+    const subCount = submissions.filter(s=>s.testId===t.id).length;
+    return `<div class="test-manage-card">
+      <div style="flex:1">
+        <div style="font-weight:700">${t.name}</div>
+        <div style="font-size:12px;color:var(--muted)">${t.date} · 満点${t.maxScore}点 · 閾値${t.threshold}% · 提出${subCount}件</div>
+      </div>
+      <button class="btn-sm btn-red" onclick="deleteTest(${t.id})">削除</button>
+    </div>`;
+  }).join('') : '<div style="text-align:center;padding:32px;color:var(--muted)">テストがまだありません</div>';
+}
+
+function createTest() {
+  const name = document.getElementById('t-name').value.trim();
+  const date = document.getElementById('t-date').value;
+  const max  = parseInt(document.getElementById('t-max').value);
+  const thr  = parseInt(document.getElementById('t-thresh').value);
+  if (!name||!date||!max) { alert('テスト名・日付・満点を入力してください'); return; }
+  tests.push({ id:Date.now(), name, date, maxScore:max, threshold:thr||80 });
+  save(); renderTestManage();
+  document.getElementById('t-name').value='';
+}
+
+function deleteTest(id) {
+  if (!confirm('このテストと関連する提出データをすべて削除しますか？')) return;
+  tests = tests.filter(t=>t.id!==id);
+  submissions = submissions.filter(s=>s.testId!==id);
+  save(); renderTestManage();
+}
+
+function renderRankSel() {
+  const sel = document.getElementById('rank-sel');
+  sel.innerHTML = tests.length
+    ? [...tests].sort((a,b)=>b.date.localeCompare(a.date)).map(t=>`<option value="${t.id}">${t.date} - ${t.name}</option>`).join('')
+    : '<option>テストがありません</option>';
+  renderRanking();
+}
+
+function renderRanking() {
+  const tid = parseInt(document.getElementById('rank-sel').value);
+  const sort = document.getElementById('rank-sort').value;
+  const t = tests.find(x=>x.id===tid);
+  const el = document.getElementById('ranking-content');
+  if (!t) { el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)">テストを選択してください</div>'; return; }
+
+  let subs = submissions.filter(s=>s.testId===tid);
+  if (sort==='desc') subs.sort((a,b)=>b.score-a.score);
+  else if (sort==='asc') subs.sort((a,b)=>a.score-b.score);
+  else subs.sort((a,b)=>a.studentName.localeCompare(b.studentName,'ja'));
+
+  const sorted = [...subs].sort((a,b)=>b.score-a.score);
+  const avg = subs.length ? Math.round(subs.reduce((a,b)=>a+b.score,0)/subs.length) : 0;
+  const avgPct = subs.length ? Math.round(avg/t.maxScore*100) : 0;
+
+  el.innerHTML = `
+    <div class="stats-grid" style="margin-bottom:20px">
+      <div class="stat-box"><div class="stat-num">${subs.length}</div><div class="stat-label">提出数</div></div>
+      <div class="stat-box"><div class="stat-num">${avg}</div><div class="stat-label">平均点</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:${avgPct>=80?'var(--green)':'var(--red)'}">${avgPct}%</div><div class="stat-label">平均達成率</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--red)">${subs.filter(s=>s.needsRetest).length}</div><div class="stat-label">再テスト対象</div></div>
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>順位</th><th>出席番号</th><th>氏名</th><th>点数</th><th>達成率</th><th>グラフ</th><th>状態</th><th>答案</th></tr></thead>
+      <tbody>
+      ${subs.map(s=>{
+        const rank = sorted.findIndex(x=>x.id===s.id)+1;
+        const medal = rank===1?'medal-1':rank===2?'medal-2':rank===3?'medal-3':'medal-n';
+        const bar = s.pct>=80?'#2a7a52':s.pct>=60?'#c08000':'#c94040';
+        return `<tr>
+          <td><span class="rank-medal ${medal}">${rank}</span></td>
+          <td style="font-family:var(--mono)">${s.studentNumber}番</td>
+          <td style="font-weight:700">${s.studentName}</td>
+          <td style="font-family:var(--mono);font-weight:700">${s.score}/${t.maxScore}</td>
+          <td style="font-weight:700;color:${bar}">${s.pct}%</td>
+          <td style="min-width:90px"><div class="progress-bg"><div class="progress-fill" style="width:${s.pct}%;background:${bar}"></div></div></td>
+          <td>${s.needsRetest?'<span class="badge badge-red">再テスト</span>':'<span class="badge badge-green">✓ 合格</span>'}</td>
+          <td><button class="thumb-btn" onclick="showPhoto(${JSON.stringify(s.photoDataURL)}, '${s.studentName}')">📷 表示</button></td>
+        </tr>`;
+      }).join('')}
+      </tbody>
+    </table></div>
+  `;
+}
+
+function renderHistory() {
+  const q = document.getElementById('hist-q').value.toLowerCase();
+  const f = document.getElementById('hist-f').value;
+  let data = [...submissions].sort((a,b)=>b.submittedAt.localeCompare(a.submittedAt));
+  if (q) data = data.filter(s=>s.testName.toLowerCase().includes(q)||s.studentName.toLowerCase().includes(q));
+  if (f==='retest') data = data.filter(s=>s.needsRetest);
+  if (f==='pass')   data = data.filter(s=>!s.needsRetest);
+
+  const el = document.getElementById('history-content');
+  if (!data.length) { el.innerHTML='<div style="text-align:center;padding:48px;color:var(--muted)">該当データがありません</div>'; return; }
+
+  // Group by testId
+  const groups = {};
+  data.forEach(s=>{ if(!groups[s.testId]) groups[s.testId]={name:s.testName,date:s.date,maxScore:s.maxScore,threshold:s.threshold,subs:[]}; groups[s.testId].subs.push(s); });
+
+  el.innerHTML = Object.values(groups).map(g=>{
+    const avg = Math.round(g.subs.reduce((a,b)=>a+b.score,0)/g.subs.length/g.maxScore*100);
+    return `<div class="section-card" style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+        <div style="flex:1"><div style="font-weight:700;font-size:15px">${g.name}</div><div style="font-size:12px;color:var(--muted)">${g.date} · 満点${g.maxScore}点 · 閾値${g.threshold}%</div></div>
+        <span class="badge ${avg>=80?'badge-green':'badge-red'}">平均 ${avg}%</span>
+      </div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>出席番号</th><th>氏名</th><th>点数</th><th>達成率</th><th>状態</th><th>提出日時</th><th>答案</th></tr></thead>
+        <tbody>${g.subs.map(s=>
+          `<tr style="${s.needsRetest?'background:var(--red-pale)':''}">
+            <td style="font-family:var(--mono)">${s.studentNumber}番</td>
+            <td style="font-weight:700">${s.studentName}</td>
+            <td>${s.score}/${s.maxScore}</td>
+            <td><span class="badge ${s.pct>=80?'badge-green':s.pct>=60?'badge-gold':'badge-red'}">${s.pct}%</span></td>
+            <td>${s.needsRetest?'<span class="badge badge-red">再テスト</span>':'<span class="badge badge-green">✓ 合格</span>'}</td>
+            <td style="font-size:12px;color:var(--muted)">${new Date(s.submittedAt).toLocaleString('ja')}</td>
+            <td><button class="thumb-btn" onclick="showPhoto(${JSON.stringify(s.photoDataURL)},'${s.studentName}')">📷</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>
+    </div>`;
+  }).join('');
+}
+
+function renderCal() {
+  const months=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  document.getElementById('cal-title').textContent=`${calY}年 ${months[calM]}`;
+  const first=new Date(calY,calM,1), last=new Date(calY,calM+1,0);
+  const startDay=first.getDay();
+  const dateMap={};
+  submissions.forEach(s=>{
+    if(!dateMap[s.date]) dateMap[s.date]=[];
+    dateMap[s.date].push(s);
+  });
+  const cells=[];
+  for(let i=0;i<startDay;i++) cells.push({d:new Date(calY,calM,-startDay+i+1),cur:false});
+  for(let d=1;d<=last.getDate();d++) cells.push({d:new Date(calY,calM,d),cur:true});
+  while(cells.length<42) cells.push({d:new Date(calY,calM+1,cells.length-startDay-last.getDate()+1),cur:false});
+
+  document.getElementById('cal-cells').innerHTML=cells.map(c=>{
+    const key=`${c.d.getFullYear()}-${String(c.d.getMonth()+1).padStart(2,'0')}-${String(c.d.getDate()).padStart(2,'0')}`;
+    const ss=dateMap[key]||[];
+    const isToday=c.d.toDateString()===today.toDateString();
+    const hasWarn=ss.some(s=>s.needsRetest);
+    const testNames=[...new Set(ss.map(s=>s.testName))];
+    return `<div class="cal-cell${!c.cur?' other':''}${isToday?' today':''}" onclick="${c.cur&&ss.length?`openCalDay('${key}')`:''}" style="${!c.cur?'pointer-events:none':''}">
+      <div class="cal-num">${c.d.getDate()}</div>
+      ${testNames.slice(0,2).map(n=>`<span class="cal-dot${hasWarn?' warn':''}">${n.length>7?n.slice(0,7)+'…':n}</span>`).join('')}
+      ${testNames.length>2?`<span style="font-size:9px;color:var(--muted)">+${testNames.length-2}</span>`:''}
+    </div>`;
+  }).join('');
+}
+
+function calMove(dir) {
+  if(dir===0){calY=today.getFullYear();calM=today.getMonth();}
+  else{ calM+=dir; if(calM>11){calM=0;calY++;}else if(calM<0){calM=11;calY--;} }
+  renderCal();
+}
+
+function openCalDay(dateStr) {
+  const ss=submissions.filter(s=>s.date===dateStr);
+  if(!ss.length) return;
+  document.getElementById('cal-modal-title').textContent=`📅 ${dateStr}`;
+  const groups={};
+  ss.forEach(s=>{ if(!groups[s.testId]) groups[s.testId]={name:s.testName,subs:[]}; groups[s.testId].subs.push(s); });
+  document.getElementById('cal-modal-body').innerHTML=Object.values(groups).map(g=>
+    `<div style="margin-bottom:16px">
+      <div style="font-weight:700;margin-bottom:8px">${g.name}</div>
+      ${g.subs.map(s=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+        <span style="font-family:var(--mono);color:var(--muted);font-size:12px">${s.studentNumber}番</span>
+        <span style="font-weight:700;flex:1">${s.studentName}</span>
+        <span class="badge ${s.pct>=80?'badge-green':'badge-red'}">${s.pct}%</span>
+        <button class="thumb-btn btn-sm" onclick="showPhoto(${JSON.stringify(s.photoDataURL)},'${s.studentName}')">📷</button>
+      </div>`).join('')}
+    </div>`).join('');
+  document.getElementById('cal-modal').classList.add('open');
+}
+
+function renderStudents() {
+  const el = document.getElementById('student-table');
+  if (!students.length) { el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)">生徒が登録されていません</div>'; return; }
+  el.innerHTML=`<div class="tbl-wrap"><table>
+    <thead><tr><th>出席番号</th><th>氏名</th><th>パスワード</th><th>提出数</th><th></th></tr></thead>
+    <tbody>${[...students].sort((a,b)=>a.number-b.number).map(s=>{
+      const pw='02'+String(s.number).padStart(2,'0');
+      const subCount=submissions.filter(x=>x.studentNumber===s.number).length;
+      return `<tr>
+        <td style="font-family:var(--mono);font-weight:700">${s.number}番</td>
+        <td style="font-weight:700">${s.name}</td>
+        <td><code style="background:var(--bg);padding:3px 8px;border-radius:5px;font-size:13px">${pw}</code></td>
+        <td>${subCount}件</td>
+        <td><button class="btn-sm btn-red" onclick="deleteStudent(${s.number})">削除</button></td>
+      </tr>`;
+    }).join('')}
+    </tbody>
+  </table></div>`;
+}
+
+function addStudent() {
+  const num  = parseInt(document.getElementById('s-num').value);
+  const name = document.getElementById('s-name').value.trim();
+  if (!num||!name) { alert('出席番号と氏名を入力してください'); return; }
+  if (students.find(s=>s.number===num)) { alert('その出席番号はすでに登録されています'); return; }
+  students.push({number:num, name});
+  save(); renderStudents();
+  document.getElementById('s-num').value='';
+  document.getElementById('s-name').value='';
+}
+
+function deleteStudent(num) {
+  if (!confirm('この生徒を削除しますか？提出データは残ります。')) return;
+  students=students.filter(s=>s.number!==num);
+  save(); renderStudents();
+}
+
+function showPhoto(dataURL, name) {
+  document.getElementById('photo-modal-title').textContent=`📷 ${name} の答案写真`;
+  document.getElementById('photo-modal-img').src=dataURL;
+  document.getElementById('photo-modal').classList.add('open');
+}
+
+// ── INIT ──
+document.getElementById('t-date').value = today.toISOString().split('T')[0];
+
+// デモデータ
+if (!students.length) {
+  for (let i=1;i<=10;i++) students.push({number:i, name:`生徒${i}番`});
+  save();
+}
+</script>
+</body>
+</html>
