@@ -24,6 +24,8 @@
   --green-pale: #edf7f2;
   --blue: #2555b8;
   --blue-pale: #eef2fc;
+  --orange: #c06010;
+  --orange-pale: #fff5eb;
   --font: 'Noto Sans JP', sans-serif;
   --mono: 'DM Mono', monospace;
   --radius: 14px;
@@ -42,12 +44,10 @@ body {
   align-items: center;
 }
 
-/* ── SCREENS ── */
 .screen { display: none; width: 100%; max-width: 480px; padding: 24px 20px 48px; }
 .screen.active { display: block; }
 .screen-wide { max-width: 1000px; }
 
-/* ── LOGIN ── */
 .login-wrap {
   min-height: 100vh;
   display: flex;
@@ -65,31 +65,16 @@ body {
   margin: 0 auto 20px;
   box-shadow: 0 8px 32px rgba(27,41,82,0.25);
 }
-.login-title {
-  font-size: 22px; font-weight: 700;
-  color: var(--navy); text-align: center; margin-bottom: 4px;
-}
-.login-sub {
-  font-size: 13px; color: var(--muted);
-  text-align: center; margin-bottom: 32px;
-}
+.login-title { font-size: 22px; font-weight: 700; color: var(--navy); text-align: center; margin-bottom: 4px; }
+.login-sub { font-size: 13px; color: var(--muted); text-align: center; margin-bottom: 32px; }
 .login-card {
-  background: var(--surface);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: 28px 24px;
-  box-shadow: var(--shadow);
-  width: 100%;
-  max-width: 360px;
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border); padding: 28px 24px;
+  box-shadow: var(--shadow); width: 100%; max-width: 360px;
 }
-.login-tabs {
-  display: flex; background: var(--bg);
-  border-radius: 10px; padding: 4px;
-  margin-bottom: 24px;
-}
+.login-tabs { display: flex; background: var(--bg); border-radius: 10px; padding: 4px; margin-bottom: 24px; }
 .login-tab {
-  flex: 1; padding: 9px;
-  border: none; background: none;
+  flex: 1; padding: 9px; border: none; background: none;
   font-family: var(--font); font-size: 13px; font-weight: 600;
   color: var(--muted); border-radius: 8px; cursor: pointer; transition: .15s;
 }
@@ -97,33 +82,16 @@ body {
 
 .form-label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .6px; text-transform: uppercase; margin-bottom: 6px; display: block; }
 .form-input {
-  width: 100%; padding: 12px 14px;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  font-size: 15px; font-family: var(--font);
-  color: var(--ink); background: var(--bg);
-  transition: .15s; margin-bottom: 16px;
+  width: 100%; padding: 12px 14px; border: 1.5px solid var(--border);
+  border-radius: 10px; font-size: 15px; font-family: var(--font);
+  color: var(--ink); background: var(--bg); transition: .15s; margin-bottom: 16px;
 }
 .form-input:focus { outline: none; border-color: var(--navy); background: white; box-shadow: 0 0 0 3px rgba(27,41,82,0.08); }
 
-/* PIN input */
-.pin-wrap { display: flex; gap: 10px; margin-bottom: 16px; }
-.pin-digit {
-  flex: 1; height: 56px;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  font-size: 22px; font-weight: 700; font-family: var(--mono);
-  text-align: center; color: var(--navy);
-  background: var(--bg); transition: .15s;
-}
-.pin-digit:focus { outline: none; border-color: var(--navy); background: white; box-shadow: 0 0 0 3px rgba(27,41,82,0.08); }
-
 .btn-primary {
-  width: 100%; padding: 14px;
-  background: var(--navy); color: white;
-  border: none; border-radius: 10px;
-  font-size: 15px; font-weight: 700; font-family: var(--font);
-  cursor: pointer; transition: .15s;
+  width: 100%; padding: 14px; background: var(--navy); color: white;
+  border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
+  font-family: var(--font); cursor: pointer; transition: .15s;
 }
 .btn-primary:hover { background: var(--navy2); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(27,41,82,0.2); }
 .btn-primary:active { transform: none; }
@@ -132,144 +100,99 @@ body {
 .error-msg { background: var(--red-pale); color: var(--red); border: 1px solid #f5c6c6; border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 16px; display: none; }
 .error-msg.show { display: block; }
 
-/* ── STUDENT SCREEN ── */
 .page-header {
-  background: var(--navy);
-  color: white;
-  padding: 16px 20px;
+  background: var(--navy); color: white; padding: 16px 20px;
   display: flex; align-items: center; gap: 12px;
   position: sticky; top: 0; z-index: 50;
 }
 .page-header h1 { font-size: 15px; font-weight: 700; flex: 1; }
-.user-chip {
-  background: rgba(255,255,255,0.15);
-  border-radius: 99px; padding: 4px 12px;
-  font-size: 12px; font-weight: 600;
-}
+.user-chip { background: rgba(255,255,255,0.15); border-radius: 99px; padding: 4px 12px; font-size: 12px; font-weight: 600; }
 .logout-btn {
-  background: none; border: 1px solid rgba(255,255,255,0.3);
-  color: white; border-radius: 8px; padding: 5px 12px;
-  font-size: 12px; font-family: var(--font); cursor: pointer; transition: .15s;
+  background: none; border: 1px solid rgba(255,255,255,0.3); color: white;
+  border-radius: 8px; padding: 5px 12px; font-size: 12px; font-family: var(--font);
+  cursor: pointer; transition: .15s;
 }
 .logout-btn:hover { background: rgba(255,255,255,0.1); }
 
 .section-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.05);
 }
-.section-title {
-  font-size: 13px; font-weight: 700; color: var(--navy);
-  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
-}
-.section-title::before {
-  content: ''; display: inline-block;
-  width: 3px; height: 14px;
-  background: var(--gold); border-radius: 2px;
-}
+.section-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.section-title::before { content: ''; display: inline-block; width: 3px; height: 14px; background: var(--gold); border-radius: 2px; }
 
-/* Test selector */
 .test-card {
-  border: 1.5px solid var(--border);
-  border-radius: 10px; padding: 14px 16px;
+  border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 16px;
   margin-bottom: 10px; cursor: pointer; transition: .15s;
   display: flex; align-items: center; gap: 12px;
 }
 .test-card:hover { border-color: var(--navy); background: var(--blue-pale); }
 .test-card.selected { border-color: var(--navy); background: var(--blue-pale); }
-.test-card-dot {
-  width: 20px; height: 20px; border-radius: 50%;
-  border: 2px solid var(--border); flex-shrink: 0; transition: .15s;
-}
+.test-card.expired { border-color: var(--orange); background: var(--orange-pale); opacity: .85; cursor: default; }
+.test-card-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; transition: .15s; }
 .test-card.selected .test-card-dot { background: var(--navy); border-color: var(--navy); }
 .test-name { font-weight: 700; font-size: 14px; }
 .test-meta { font-size: 12px; color: var(--muted); }
 
-/* Score input */
+.deadline-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 700; padding: 2px 8px;
+  border-radius: 99px;
+}
+.deadline-ok { background: var(--green-pale); color: var(--green); }
+.deadline-warn { background: var(--orange-pale); color: var(--orange); border: 1px solid #f5c090; }
+.deadline-over { background: var(--red-pale); color: var(--red); border: 1px solid #f5c6c6; }
+
 .score-input-wrap { position: relative; }
 .score-big {
-  width: 100%; padding: 16px 60px 16px 16px;
-  border: 1.5px solid var(--border);
-  border-radius: 12px; font-size: 28px;
-  font-weight: 700; font-family: var(--mono);
-  color: var(--navy); text-align: center;
-  background: var(--bg); transition: .15s;
+  width: 100%; padding: 16px 60px 16px 16px; border: 1.5px solid var(--border);
+  border-radius: 12px; font-size: 28px; font-weight: 700; font-family: var(--mono);
+  color: var(--navy); text-align: center; background: var(--bg); transition: .15s;
 }
 .score-big:focus { outline: none; border-color: var(--navy); background: white; box-shadow: 0 0 0 3px rgba(27,41,82,0.08); }
 .score-max { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--muted); font-weight: 600; }
-.score-pct {
-  text-align: center; font-size: 18px; font-weight: 700;
-  margin-top: 10px; transition: .2s;
-}
+.score-pct { text-align: center; font-size: 18px; font-weight: 700; margin-top: 10px; transition: .2s; }
 
-/* Photo area */
 .photo-zone {
-  border: 2px dashed var(--border);
-  border-radius: 12px; padding: 28px 20px;
-  text-align: center; cursor: pointer;
-  transition: .15s; background: var(--bg);
-  position: relative;
+  border: 2px dashed var(--border); border-radius: 12px; padding: 28px 20px;
+  text-align: center; cursor: pointer; transition: .15s; background: var(--bg); position: relative;
 }
 .photo-zone:hover { border-color: var(--navy); background: #eef1f8; }
 .photo-zone.has-photo { border-style: solid; border-color: var(--green); background: var(--green-pale); }
 .photo-zone-icon { font-size: 36px; margin-bottom: 8px; }
 .photo-zone-text { font-size: 14px; color: var(--muted); font-weight: 600; }
 .photo-zone-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
-.photo-preview-img {
-  width: 100%; border-radius: 10px;
-  max-height: 240px; object-fit: cover;
-  display: none; margin-top: 14px;
-  border: 1px solid var(--border);
-}
-.required-badge {
-  display: inline-block; background: var(--red); color: white;
-  font-size: 10px; font-weight: 700; padding: 2px 7px;
-  border-radius: 99px; vertical-align: middle; margin-left: 6px;
-}
-.ok-badge {
-  display: inline-block; background: var(--green); color: white;
-  font-size: 10px; font-weight: 700; padding: 2px 7px;
-  border-radius: 99px; vertical-align: middle; margin-left: 6px;
-}
+.photo-preview-img { width: 100%; border-radius: 10px; max-height: 240px; object-fit: cover; display: none; margin-top: 14px; border: 1px solid var(--border); }
+.required-badge { display: inline-block; background: var(--red); color: white; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px; vertical-align: middle; margin-left: 6px; }
+.ok-badge { display: inline-block; background: var(--green); color: white; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px; vertical-align: middle; margin-left: 6px; }
 
-/* Submit */
 .submit-btn {
-  width: 100%; padding: 16px;
-  background: var(--navy); color: white;
-  border: none; border-radius: 12px;
-  font-size: 16px; font-weight: 700; font-family: var(--font);
-  cursor: pointer; transition: .2s;
+  width: 100%; padding: 16px; background: var(--navy); color: white;
+  border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
+  font-family: var(--font); cursor: pointer; transition: .2s;
   box-shadow: 0 4px 16px rgba(27,41,82,0.2);
 }
 .submit-btn:hover:not(:disabled) { background: var(--navy2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,41,82,0.25); }
 .submit-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
 
-/* Success screen */
 .success-wrap { text-align: center; padding: 48px 20px; }
 .success-icon { font-size: 72px; margin-bottom: 16px; animation: pop .4s cubic-bezier(.17,.67,.35,1.3); }
 @keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .success-title { font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
 .success-sub { color: var(--muted); font-size: 14px; line-height: 1.7; }
 
-/* ── ADMIN ── */
 .admin-header {
-  background: var(--ink);
-  color: white;
-  padding: 0;
-  position: sticky; top: 0; z-index: 50;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.3);
+  background: var(--ink); color: white; padding: 0;
+  position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 16px rgba(0,0,0,0.3);
 }
 .admin-header-inner { display: flex; align-items: center; gap: 12px; padding: 14px 20px; }
 .admin-header h1 { font-size: 16px; font-weight: 700; flex: 1; color: var(--gold); }
 .admin-nav { display: flex; background: rgba(255,255,255,0.07); overflow-x: auto; }
 .admin-nav-btn {
   background: none; border: none; border-bottom: 3px solid transparent;
-  color: rgba(255,255,255,0.6); padding: 10px 18px;
-  font-size: 13px; font-family: var(--font); font-weight: 600;
-  cursor: pointer; white-space: nowrap; transition: .15s;
+  color: rgba(255,255,255,0.6); padding: 10px 18px; font-size: 13px;
+  font-family: var(--font); font-weight: 600; cursor: pointer; white-space: nowrap; transition: .15s;
 }
 .admin-nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
 .admin-nav-btn:hover:not(.active) { color: white; }
@@ -277,16 +200,11 @@ body {
 .admin-page { display: none; padding: 24px 20px; max-width: 1000px; margin: 0 auto; }
 .admin-page.active { display: block; }
 
-/* Stats */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 12px; margin-bottom: 24px; }
-.stat-box {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 16px; text-align: center;
-}
+.stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
 .stat-num { font-size: 26px; font-weight: 700; color: var(--navy); font-family: var(--mono); }
 .stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 600; }
 
-/* Table */
 .tbl-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th { background: var(--ink); color: rgba(255,255,255,0.85); padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .4px; white-space: nowrap; }
@@ -304,52 +222,41 @@ tr:hover td { background: #f8f9fd; }
 .badge-red { background: var(--red-pale); color: var(--red); }
 .badge-gold { background: var(--gold-pale); color: #7a5a00; }
 .badge-blue { background: var(--blue-pale); color: var(--blue); }
+.badge-orange { background: var(--orange-pale); color: var(--orange); }
 
 .progress-bg { background: var(--border); border-radius: 99px; height: 7px; min-width: 80px; }
 .progress-fill { height: 100%; border-radius: 99px; }
 
-/* Photo thumb */
 .thumb-btn {
-  background: var(--blue-pale); border: 1px solid #c0d0f0;
-  color: var(--blue); border-radius: 7px; padding: 4px 10px;
-  font-size: 12px; font-family: var(--font); font-weight: 600; cursor: pointer;
-  transition: .12s;
+  background: var(--blue-pale); border: 1px solid #c0d0f0; color: var(--blue);
+  border-radius: 7px; padding: 4px 10px; font-size: 12px; font-family: var(--font);
+  font-weight: 600; cursor: pointer; transition: .12s;
 }
 .thumb-btn:hover { background: #d8e6ff; }
 
-/* Modal */
 .modal-bg {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.6); z-index: 200;
-  align-items: center; justify-content: center; padding: 20px;
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 200; align-items: center; justify-content: center; padding: 20px;
   backdrop-filter: blur(4px);
 }
 .modal-bg.open { display: flex; }
 .modal-box {
-  background: var(--surface); border-radius: 18px;
-  padding: 24px; width: 100%; max-width: 540px;
-  max-height: 90vh; overflow-y: auto;
+  background: var(--surface); border-radius: 18px; padding: 24px;
+  width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto;
   box-shadow: 0 24px 64px rgba(0,0,0,0.3);
 }
 .modal-close {
-  position: absolute; top: 16px; right: 16px;
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 50%; width: 32px; height: 32px;
-  font-size: 16px; cursor: pointer; display: flex;
-  align-items: center; justify-content: center;
+  position: absolute; top: 16px; right: 16px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 50%; width: 32px; height: 32px;
+  font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
 
-/* Test management */
 .test-manage-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 12px; padding: 16px 18px; margin-bottom: 10px;
   display: flex; align-items: center; gap: 12px;
 }
-.btn-sm {
-  padding: 6px 14px; border-radius: 8px;
-  font-size: 12px; font-weight: 700; font-family: var(--font);
-  cursor: pointer; border: none; transition: .12s;
-}
+.btn-sm { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; font-family: var(--font); cursor: pointer; border: none; transition: .12s; }
 .btn-navy { background: var(--navy); color: white; }
 .btn-navy:hover { background: var(--navy2); }
 .btn-ghost { background: var(--bg); color: var(--ink2); border: 1px solid var(--border); }
@@ -357,16 +264,11 @@ tr:hover td { background: #f8f9fd; }
 .btn-red { background: var(--red-pale); color: var(--red); }
 .btn-red:hover { background: #fcd8d8; }
 
-/* Calendar */
 .cal-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .cal-nav h2 { flex: 1; text-align: center; font-size: 16px; font-weight: 700; color: var(--navy); }
 .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
 .cal-weekday { text-align: center; font-size: 11px; font-weight: 700; color: var(--muted); padding: 6px; }
-.cal-cell {
-  min-height: 72px; background: var(--surface);
-  border: 1px solid var(--border); border-radius: 10px;
-  padding: 6px 5px; cursor: pointer; transition: .12s;
-}
+.cal-cell { min-height: 72px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 6px 5px; cursor: pointer; transition: .12s; }
 .cal-cell:hover { border-color: var(--navy); }
 .cal-cell.today { border-color: var(--navy); border-width: 2px; }
 .cal-cell.other { opacity: .3; cursor: default; }
@@ -374,17 +276,26 @@ tr:hover td { background: #f8f9fd; }
 .cal-num { font-size: 13px; font-weight: 600; color: var(--muted); }
 .cal-dot { font-size: 9px; background: var(--navy); color: white; border-radius: 4px; padding: 1px 4px; margin-top: 2px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
 .cal-dot.warn { background: var(--red); }
+.cal-dot.deadline { background: var(--orange); }
 
-/* Input area for admin test creation */
 .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .input-group { display: flex; flex-direction: column; gap: 5px; }
 .input-group.full { grid-column: 1/-1; }
 .inp {
-  padding: 9px 12px; border: 1.5px solid var(--border);
-  border-radius: 9px; font-size: 14px; font-family: var(--font);
-  color: var(--ink); background: var(--bg); transition: .15s;
+  padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 9px;
+  font-size: 14px; font-family: var(--font); color: var(--ink);
+  background: var(--bg); transition: .15s;
 }
 .inp:focus { outline: none; border-color: var(--navy); background: white; }
+
+/* 期限切れ警告バナー */
+.deadline-banner {
+  background: var(--orange-pale); border: 1.5px solid #f5c090;
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.deadline-banner-icon { font-size: 20px; flex-shrink: 0; }
+.deadline-banner-text { font-size: 13px; color: var(--orange); font-weight: 600; line-height: 1.6; }
 
 @media(max-width:600px){
   .input-row { grid-template-columns: 1fr; }
@@ -395,39 +306,25 @@ tr:hover td { background: #f8f9fd; }
 </head>
 <body>
 
-<!-- ══════════ LOGIN ══════════ -->
+<!-- ══ LOGIN ══ -->
 <div id="screen-login" class="screen active">
 <div class="login-wrap">
   <div class="login-logo">📝</div>
   <div class="login-title">英語テスト 成績入力</div>
   <div class="login-sub">羽田国際高等学校</div>
-
   <div class="login-card">
     <div class="login-tabs">
       <button class="login-tab active" onclick="switchLoginTab('student')">生徒ログイン</button>
       <button class="login-tab" onclick="switchLoginTab('admin')">管理者</button>
     </div>
-
-    <!-- Student login -->
     <div id="login-student">
       <label class="form-label">名前</label>
       <input id="inp-name" class="form-input" type="text" placeholder="例: 山田太郎" onkeydown="if(event.key==='Enter')document.getElementById('inp-password').focus()">
-
       <label class="form-label">パスワード</label>
       <input id="inp-password" class="form-input" type="password" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter')loginStudent()">
-
-      <div style="display:none">
-        <input type="hidden" id="inp-number" value="0">
-        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p0">
-        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p1">
-        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p2">
-        <input class="pin-digit" type="password" maxlength="1" inputmode="numeric" id="p3">
-      </div>
       <div class="error-msg" id="student-err"></div>
       <button class="btn-primary" onclick="loginStudent()">ログイン</button>
     </div>
-
-    <!-- Admin login -->
     <div id="login-admin" style="display:none">
       <label class="form-label">管理者パスワード</label>
       <input id="inp-admin-pw" class="form-input" type="password" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter')loginAdmin()">
@@ -438,7 +335,7 @@ tr:hover td { background: #f8f9fd; }
 </div>
 </div>
 
-<!-- ══════════ STUDENT: SELECT TEST ══════════ -->
+<!-- ══ STUDENT: SELECT TEST ══ -->
 <div id="screen-select" class="screen">
   <div class="page-header">
     <h1>📝 テストを選択</h1>
@@ -446,14 +343,11 @@ tr:hover td { background: #f8f9fd; }
     <button class="logout-btn" onclick="logout()">ログアウト</button>
   </div>
   <div style="padding:20px">
-
-    <!-- 自分の成績サマリー -->
     <div id="my-stats-card" style="display:none" class="section-card">
       <div class="section-title">📊 自分の成績</div>
       <div id="my-stats-summary" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px"></div>
       <div id="my-stats-list"></div>
     </div>
-
     <div class="section-card">
       <div class="section-title">受けたテストを選んでください</div>
       <div id="test-list"></div>
@@ -463,13 +357,11 @@ tr:hover td { background: #f8f9fd; }
         <span style="font-size:12px">管理者に連絡してください</span>
       </div>
     </div>
-    <button class="submit-btn" onclick="goToInput()" id="btn-go-input" disabled style="margin-top:4px">
-      次へ → 点数入力
-    </button>
+    <button class="submit-btn" onclick="goToInput()" id="btn-go-input" disabled style="margin-top:4px">次へ → 点数入力</button>
   </div>
 </div>
 
-<!-- ══════════ STUDENT: INPUT ══════════ -->
+<!-- ══ STUDENT: INPUT ══ -->
 <div id="screen-input" class="screen">
   <div class="page-header">
     <h1>✏️ 点数入力</h1>
@@ -477,12 +369,16 @@ tr:hover td { background: #f8f9fd; }
     <button class="logout-btn" onclick="showScreen('screen-select')">← 戻る</button>
   </div>
   <div style="padding:20px">
+    <!-- 期限切れバナー（必要時のみ表示） -->
+    <div id="expired-banner" class="deadline-banner" style="display:none">
+      <div class="deadline-banner-icon">⚠️</div>
+      <div class="deadline-banner-text" id="expired-banner-text"></div>
+    </div>
 
     <div class="section-card">
       <div class="section-title">テスト情報</div>
       <div id="selected-test-info"></div>
     </div>
-
     <div class="section-card">
       <div class="section-title">点数を入力</div>
       <div class="score-input-wrap">
@@ -491,12 +387,8 @@ tr:hover td { background: #f8f9fd; }
       </div>
       <div class="score-pct" id="score-pct-display" style="color:var(--muted)">—</div>
     </div>
-
     <div class="section-card">
-      <div class="section-title">
-        答案の写真
-        <span id="photo-badge" class="required-badge">必須</span>
-      </div>
+      <div class="section-title">答案の写真<span id="photo-badge" class="required-badge">必須</span></div>
       <div class="photo-zone" id="photo-zone" onclick="document.getElementById('photo-file').click()">
         <div class="photo-zone-icon" id="photo-icon">📷</div>
         <div class="photo-zone-text" id="photo-text">タップして答案を撮影・選択</div>
@@ -505,21 +397,18 @@ tr:hover td { background: #f8f9fd; }
       </div>
       <input id="photo-file" type="file" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
     </div>
-
     <div class="error-msg" id="input-err"></div>
     <button class="submit-btn" onclick="submitScore()" id="submit-btn">送信する</button>
   </div>
 </div>
 
-<!-- ══════════ SUCCESS ══════════ -->
+<!-- ══ SUCCESS ══ -->
 <div id="screen-success" class="screen">
   <div style="padding:20px">
     <div class="success-wrap">
       <div class="success-icon" id="success-icon">✅</div>
       <div class="success-title" id="success-title">提出完了！</div>
       <div class="success-sub" id="success-msg"></div>
-
-      <!-- 再テスト送信エリア（再テスト対象のみ表示） -->
       <div id="retest-area" style="display:none;margin-top:28px;background:var(--red-pale);border:1.5px solid #f5c6c6;border-radius:14px;padding:20px">
         <div style="font-weight:700;color:var(--red);margin-bottom:6px;font-size:15px">⚠️ 再テストの成績を入力してください</div>
         <div style="font-size:13px;color:var(--ink2);margin-bottom:16px">再テスト結果を送信してからログアウトできます。</div>
@@ -528,7 +417,6 @@ tr:hover td { background: #f8f9fd; }
           <span class="score-max" id="retest-score-max-label">/100</span>
         </div>
         <div class="score-pct" id="retest-pct-display" style="color:var(--muted);margin-bottom:16px">—</div>
-
         <div class="photo-zone" id="retest-photo-zone" onclick="document.getElementById('retest-photo-file').click()" style="margin-bottom:16px">
           <div class="photo-zone-icon" id="retest-photo-icon">📷</div>
           <div class="photo-zone-text" id="retest-photo-text">再テストの答案を撮影・選択</div>
@@ -536,19 +424,15 @@ tr:hover td { background: #f8f9fd; }
           <img id="retest-photo-preview" class="photo-preview-img" alt="再テスト答案プレビュー">
         </div>
         <input id="retest-photo-file" type="file" accept="image/*" capture="environment" style="display:none" onchange="handleRetestPhoto(this)">
-
         <div class="error-msg" id="retest-err"></div>
         <button class="submit-btn" onclick="submitRetest()" style="background:var(--red)">再テストを送信する →</button>
       </div>
-
-      <button id="logout-btn-success" class="btn-primary" style="margin-top:24px;max-width:240px;margin-left:auto;margin-right:auto;display:block" onclick="logout()">
-        ログアウト
-      </button>
+      <button id="logout-btn-success" class="btn-primary" style="margin-top:24px;max-width:240px;margin-left:auto;margin-right:auto;display:block" onclick="logout()">ログアウト</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════ ADMIN ══════════ -->
+<!-- ══ ADMIN ══ -->
 <div id="screen-admin" class="screen screen-wide" style="padding:0;max-width:100%">
   <div class="admin-header">
     <div class="admin-header-inner">
@@ -568,9 +452,14 @@ tr:hover td { background: #f8f9fd; }
   <!-- DASH -->
   <div id="admin-dash" class="admin-page active">
     <div id="admin-stats" class="stats-grid"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
       <div class="section-card"><div class="section-title">要再テスト</div><div id="admin-retest"></div></div>
       <div class="section-card"><div class="section-title">最新の提出</div><div id="admin-recent"></div></div>
+    </div>
+    <!-- 期限切れ未提出 -->
+    <div class="section-card" style="border-color:#f5c090">
+      <div class="section-title" style="color:var(--orange)">⏰ 期限切れ・未提出</div>
+      <div id="admin-overdue"></div>
     </div>
   </div>
 
@@ -583,6 +472,10 @@ tr:hover td { background: #f8f9fd; }
         <div class="input-group"><label class="form-label">実施日 *</label><input id="t-date" class="inp" type="date"></div>
         <div class="input-group"><label class="form-label">満点 *</label><input id="t-max" class="inp" type="number" value="100" min="1"></div>
         <div class="input-group"><label class="form-label">再テスト閾値（%）</label><input id="t-thresh" class="inp" type="number" value="80" min="0" max="100"></div>
+        <div class="input-group full">
+          <label class="form-label">提出期限（任意）<span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)"> — 期限を過ぎた未提出者は自動で再テスト対象になります</span></label>
+          <input id="t-deadline" class="inp" type="datetime-local">
+        </div>
       </div>
       <button class="btn-sm btn-navy" style="margin-top:14px" onclick="createTest()">＋ テストを追加</button>
     </div>
@@ -595,6 +488,7 @@ tr:hover td { background: #f8f9fd; }
       <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
         <div class="input-group" style="flex:1;min-width:200px"><label class="form-label">テスト</label><select id="rank-sel" class="inp" onchange="renderRanking()"></select></div>
         <div class="input-group"><label class="form-label">並び順</label><select id="rank-sort" class="inp" onchange="renderRanking()"><option value="desc">高い順</option><option value="asc">低い順</option><option value="name">名前順</option></select></div>
+        <div class="input-group"><label class="form-label">表示</label><select id="rank-filter" class="inp" onchange="renderRanking()"><option value="all">全員</option><option value="submitted">提出済のみ</option><option value="overdue">期限切れ未提出</option></select></div>
       </div>
     </div>
     <div class="section-card"><div id="ranking-content"></div></div>
@@ -608,6 +502,7 @@ tr:hover td { background: #f8f9fd; }
         <option value="all">すべて</option>
         <option value="retest">再テストのみ</option>
         <option value="pass">合格のみ</option>
+        <option value="overdue">期限切れ未提出</option>
       </select>
     </div>
     <div id="history-content"></div>
@@ -622,6 +517,11 @@ tr:hover td { background: #f8f9fd; }
         <button class="btn-sm btn-ghost" onclick="calMove(1)">▶</button>
         <button class="btn-sm btn-ghost" onclick="calMove(0)">今月</button>
       </div>
+      <div style="display:flex;gap:12px;margin-bottom:12px;font-size:11px;font-weight:700;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:5px"><span style="background:var(--navy);color:white;border-radius:4px;padding:1px 6px">●</span> 提出</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="background:var(--orange);color:white;border-radius:4px;padding:1px 6px">●</span> 提出期限</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="background:var(--red);color:white;border-radius:4px;padding:1px 6px">●</span> 要再テスト</span>
+      </div>
       <div class="cal-grid">
         <div class="cal-weekday">日</div><div class="cal-weekday">月</div><div class="cal-weekday">火</div>
         <div class="cal-weekday">水</div><div class="cal-weekday">木</div><div class="cal-weekday">金</div><div class="cal-weekday">土</div>
@@ -635,18 +535,9 @@ tr:hover td { background: #f8f9fd; }
     <div class="section-card" style="margin-bottom:16px;border:1.5px solid #c0d0f0">
       <div class="section-title" style="color:var(--navy)">🔑 管理者パスワードを変更</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-        <div style="flex:1;min-width:160px">
-          <label class="form-label">現在のパスワード</label>
-          <input id="pw-current" class="inp" type="password" placeholder="現在のパスワード">
-        </div>
-        <div style="flex:1;min-width:160px">
-          <label class="form-label">新しいパスワード</label>
-          <input id="pw-new" class="inp" type="password" placeholder="新しいパスワード">
-        </div>
-        <div style="flex:1;min-width:160px">
-          <label class="form-label">新しいパスワード（確認）</label>
-          <input id="pw-confirm" class="inp" type="password" placeholder="もう一度入力">
-        </div>
+        <div style="flex:1;min-width:160px"><label class="form-label">現在のパスワード</label><input id="pw-current" class="inp" type="password" placeholder="現在のパスワード"></div>
+        <div style="flex:1;min-width:160px"><label class="form-label">新しいパスワード</label><input id="pw-new" class="inp" type="password" placeholder="新しいパスワード"></div>
+        <div style="flex:1;min-width:160px"><label class="form-label">確認</label><input id="pw-confirm" class="inp" type="password" placeholder="もう一度入力"></div>
         <button class="btn-sm btn-navy" onclick="changeAdminPw()">変更する</button>
       </div>
       <div class="error-msg" id="pw-err" style="margin-top:10px;margin-bottom:0"></div>
@@ -685,74 +576,99 @@ tr:hover td { background: #f8f9fd; }
 
 <script>
 // ══ STATE ══
-let ADMIN_PW = localStorage.getItem('ets_admin_pw') || '0000'; // 管理者パスワード
-let students = JSON.parse(localStorage.getItem('ets_students') || '[]');
-let tests    = JSON.parse(localStorage.getItem('ets_tests')    || '[]');
-let submissions = JSON.parse(localStorage.getItem('ets_subs')  || '[]');
-// submissions: [{id, testId, studentNumber, studentName, score, photoDataURL, submittedAt}]
+let ADMIN_PW = localStorage.getItem('ets_admin_pw') || '0000';
+let students    = JSON.parse(localStorage.getItem('ets_students') || '[]');
+let tests       = JSON.parse(localStorage.getItem('ets_tests')    || '[]');
+let submissions = JSON.parse(localStorage.getItem('ets_subs')     || '[]');
 
-let currentUser = null; // {number, name}
+let currentUser = null;
 let selectedTestId = null;
 let capturedPhoto = null;
+let retestCapturedPhoto = null;
 let calY, calM;
 const today = new Date();
 calY = today.getFullYear(); calM = today.getMonth();
 
 function save() {
   localStorage.setItem('ets_students', JSON.stringify(students));
-  localStorage.setItem('ets_tests', JSON.stringify(tests));
-  localStorage.setItem('ets_subs', JSON.stringify(submissions));
+  localStorage.setItem('ets_tests',    JSON.stringify(tests));
+  localStorage.setItem('ets_subs',     JSON.stringify(submissions));
   localStorage.setItem('ets_admin_pw', ADMIN_PW);
 }
 
-// ══ SCREEN ══
+// ── 期限ユーティリティ ──
+function isDeadlinePassed(test) {
+  if (!test.deadline) return false;
+  return new Date() > new Date(test.deadline);
+}
+
+function deadlineLabel(test) {
+  if (!test.deadline) return '';
+  const d = new Date(test.deadline);
+  const now = new Date();
+  const diff = d - now;
+  if (diff < 0) return '期限切れ';
+  const hours = Math.floor(diff / 3600000);
+  if (hours < 24) return `残り約${hours}時間`;
+  const days = Math.floor(diff / 86400000);
+  return `残り${days}日`;
+}
+
+function deadlineBadgeClass(test) {
+  if (!test.deadline) return '';
+  const d = new Date(test.deadline);
+  const now = new Date();
+  const diff = d - now;
+  if (diff < 0) return 'deadline-over';
+  if (diff < 86400000 * 2) return 'deadline-warn';
+  return 'deadline-ok';
+}
+
+// 期限切れ未提出者一覧 { test, student }
+function getOverdueList() {
+  const result = [];
+  tests.forEach(t => {
+    if (!t.deadline || !isDeadlinePassed(t)) return;
+    students.forEach(s => {
+      const submitted = submissions.find(x => x.testId === t.id && x.studentNumber === s.number && !x.isRetest);
+      if (!submitted) result.push({ test: t, student: s });
+    });
+  });
+  return result;
+}
+
+// ── SCREEN ──
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
 }
 
-// ══ LOGIN ══
+// ── LOGIN ──
 function switchLoginTab(tab) {
   document.querySelectorAll('.login-tab').forEach((b,i) => b.classList.toggle('active', (i===0&&tab==='student')||(i===1&&tab==='admin')));
   document.getElementById('login-student').style.display = tab==='student' ? '' : 'none';
   document.getElementById('login-admin').style.display   = tab==='admin'   ? '' : 'none';
 }
 
-function pinNext(idx) {
-  const el = document.getElementById('p'+idx);
-  if (el.value.length === 1 && idx < 3) document.getElementById('p'+(idx+1)).focus();
-}
-
-function getPin() {
-  return ['p0','p1','p2','p3'].map(id => document.getElementById(id).value).join('');
-}
-
-function showErr(id, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg; el.classList.add('show');
-}
+function showErr(id, msg) { const el=document.getElementById(id); el.textContent=msg; el.classList.add('show'); }
 function hideErr(id) { document.getElementById(id).classList.remove('show'); }
 
 function loginStudent() {
   hideErr('student-err');
   const nameInput = document.getElementById('inp-name').value.trim();
   const pwInput   = document.getElementById('inp-password').value;
-  if (!nameInput) { showErr('student-err', '名前を入力してください'); return; }
-  if (!pwInput)   { showErr('student-err', 'パスワードを入力してください'); return; }
-
-  // 登録済み生徒から名前で検索
+  if (!nameInput) { showErr('student-err','名前を入力してください'); return; }
+  if (!pwInput)   { showErr('student-err','パスワードを入力してください'); return; }
   const st = students.find(s => s.name === nameInput);
-  if (!st) { showErr('student-err', '名前が登録されていません。管理者に確認してください'); return; }
-
-  const expectedPw = '02' + String(st.number).padStart(2, '0');
+  if (!st) { showErr('student-err','名前が登録されていません。管理者に確認してください'); return; }
+  const expectedPw = '02' + String(st.number).padStart(2,'0');
   if (pwInput !== expectedPw) {
-    showErr('student-err', 'パスワードが違います');
+    showErr('student-err','パスワードが違います');
     document.getElementById('inp-password').value = '';
     document.getElementById('inp-password').focus();
     return;
   }
-
   currentUser = { number: st.number, name: st.name };
   document.getElementById('user-chip-select').textContent = currentUser.name;
   document.getElementById('user-chip-input').textContent  = currentUser.name;
@@ -763,17 +679,16 @@ function loginStudent() {
 function loginAdmin() {
   hideErr('admin-err');
   const pw = document.getElementById('inp-admin-pw').value;
-  if (pw !== ADMIN_PW) { showErr('admin-err', 'パスワードが違います'); return; }
+  if (pw !== ADMIN_PW) { showErr('admin-err','パスワードが違います'); return; }
   renderAdminDash();
   showScreen('screen-admin');
 }
 
 function logout() {
-  currentUser = null; selectedTestId = null; capturedPhoto = null;
-  ['p0','p1','p2','p3'].forEach(id => document.getElementById(id).value='');
-  document.getElementById('inp-name').value='';
-  document.getElementById('inp-password').value='';
-  document.getElementById('inp-admin-pw').value='';
+  currentUser = null; selectedTestId = null; capturedPhoto = null; retestCapturedPhoto = null;
+  document.getElementById('inp-name').value = '';
+  document.getElementById('inp-password').value = '';
+  document.getElementById('inp-admin-pw').value = '';
   hideErr('student-err'); hideErr('admin-err');
   showScreen('screen-login');
 }
@@ -785,14 +700,32 @@ function renderTestList() {
   if (!tests.length) { el.innerHTML=''; noEl.style.display=''; }
   else {
     noEl.style.display='none';
-    el.innerHTML = tests.sort((a,b)=>b.date.localeCompare(a.date)).map(t => {
+    el.innerHTML = tests.sort((a,b) => b.date.localeCompare(a.date)).map(t => {
       const already = submissions.find(s => s.testId===t.id && s.studentNumber===currentUser.number && !s.isRetest);
       const alreadyBadge = already ? `<span class="badge badge-blue" style="font-size:10px;margin-left:6px">提出済</span>` : '';
-      return `<div class="test-card" id="tc-${t.id}" onclick="selectTest(${t.id})">
+      const expired = isDeadlinePassed(t);
+      const dlLabel = deadlineLabel(t);
+      const dlClass = deadlineBadgeClass(t);
+      const dlBadge = t.deadline
+        ? `<span class="deadline-badge ${dlClass}" style="margin-left:6px">${expired ? '⛔ 期限切れ' : '⏰ ' + dlLabel}</span>`
+        : '';
+      const deadlineInfo = t.deadline
+        ? `<div style="font-size:11px;color:${expired?'var(--red)':'var(--muted)'};margin-top:2px">
+             提出期限: ${new Date(t.deadline).toLocaleString('ja',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}
+           </div>`
+        : '';
+
+      // 期限切れ未提出の場合は選択不可にしてクリック説明
+      const isOverdue = expired && !already;
+      const cardClass = isOverdue ? 'expired' : '';
+      const clickAttr = isOverdue ? '' : `onclick="selectTest(${t.id})"`;
+
+      return `<div class="test-card ${cardClass}" id="tc-${t.id}" ${clickAttr}>
         <div class="test-card-dot" id="dot-${t.id}"></div>
-        <div>
-          <div class="test-name">${t.name}${alreadyBadge}</div>
-          <div class="test-meta">${t.date} · 満点${t.maxScore}点</div>
+        <div style="flex:1">
+          <div class="test-name">${t.name}${alreadyBadge}${dlBadge}</div>
+          <div class="test-meta">${t.date} · 満点${t.maxScore}点${deadlineInfo}</div>
+          ${isOverdue ? '<div style="font-size:11px;color:var(--red);margin-top:4px;font-weight:700">提出期限が過ぎています。先生に確認してください。</div>' : ''}
         </div>
       </div>`;
     }).join('');
@@ -802,38 +735,18 @@ function renderTestList() {
 
 function renderMyStats() {
   const myNum = currentUser.number;
-  // 自分の通常提出（再テスト除く）
   const mySubs = submissions.filter(s => s.studentNumber===myNum && !s.isRetest);
   const statsCard = document.getElementById('my-stats-card');
   if (!mySubs.length) { statsCard.style.display='none'; return; }
   statsCard.style.display='';
-
-  // 全体平均
-  const totalAvg = mySubs.length
-    ? Math.round(mySubs.reduce((a,s)=>a+s.pct,0)/mySubs.length)
-    : 0;
+  const totalAvg = Math.round(mySubs.reduce((a,s)=>a+s.pct,0)/mySubs.length);
   const passCount = mySubs.filter(s=>!s.needsRetest).length;
-
   document.getElementById('my-stats-summary').innerHTML = `
-    <div class="stat-box" style="flex:1;min-width:90px">
-      <div class="stat-num" style="font-size:22px">${mySubs.length}</div>
-      <div class="stat-label">提出済テスト</div>
-    </div>
-    <div class="stat-box" style="flex:1;min-width:90px">
-      <div class="stat-num" style="font-size:22px;color:${totalAvg>=80?'var(--green)':'var(--red)'}">${totalAvg}%</div>
-      <div class="stat-label">自分の平均</div>
-    </div>
-    <div class="stat-box" style="flex:1;min-width:90px">
-      <div class="stat-num" style="font-size:22px;color:var(--green)">${passCount}</div>
-      <div class="stat-label">合格数</div>
-    </div>
-    <div class="stat-box" style="flex:1;min-width:90px">
-      <div class="stat-num" style="font-size:22px;color:var(--red)">${mySubs.length-passCount}</div>
-      <div class="stat-label">再テスト数</div>
-    </div>
+    <div class="stat-box" style="flex:1;min-width:90px"><div class="stat-num" style="font-size:22px">${mySubs.length}</div><div class="stat-label">提出済</div></div>
+    <div class="stat-box" style="flex:1;min-width:90px"><div class="stat-num" style="font-size:22px;color:${totalAvg>=80?'var(--green)':'var(--red)'}">${totalAvg}%</div><div class="stat-label">平均</div></div>
+    <div class="stat-box" style="flex:1;min-width:90px"><div class="stat-num" style="font-size:22px;color:var(--green)">${passCount}</div><div class="stat-label">合格数</div></div>
+    <div class="stat-box" style="flex:1;min-width:90px"><div class="stat-num" style="font-size:22px;color:var(--red)">${mySubs.length-passCount}</div><div class="stat-label">再テスト数</div></div>
   `;
-
-  // テストごとの詳細（順位付き）
   const rows = mySubs.sort((a,b)=>b.submittedAt.localeCompare(a.submittedAt)).map(s => {
     const allForTest = submissions.filter(x=>x.testId===s.testId && !x.isRetest);
     const rank = allForTest.filter(x=>x.score>s.score).length + 1;
@@ -841,15 +754,11 @@ function renderMyStats() {
     const classAvg = total ? Math.round(allForTest.reduce((a,x)=>a+x.pct,0)/total) : 0;
     const medal = rank===1?'medal-1':rank===2?'medal-2':rank===3?'medal-3':'medal-n';
     const bar = s.pct>=80?'var(--green)':s.pct>=60?'#c08000':'var(--red)';
-
-    // 再テスト結果があれば表示
     const retest = submissions.find(x=>x.testId===s.testId && x.studentNumber===myNum && x.isRetest);
     const retestRow = retest
       ? `<div style="margin-top:6px;padding:6px 10px;background:var(--blue-pale);border-radius:8px;font-size:12px;color:var(--blue);font-weight:600">
            🔄 再テスト: ${retest.score}/${retest.maxScore}点 (${retest.pct}%) ${retest.needsRetest?'⚠️':'✅'}
-         </div>`
-      : '';
-
+         </div>` : '';
     return `<div style="padding:12px 0;border-bottom:1px solid var(--border)">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
         <div style="flex:1;min-width:120px">
@@ -865,20 +774,21 @@ function renderMyStats() {
           ${s.needsRetest?'<span class="badge badge-red">再テスト</span>':'<span class="badge badge-green">✓ 合格</span>'}
         </div>
       </div>
-      <div style="margin-top:7px">
-        <div class="progress-bg"><div class="progress-fill" style="width:${s.pct}%;background:${bar}"></div></div>
-      </div>
+      <div style="margin-top:7px"><div class="progress-bg"><div class="progress-fill" style="width:${s.pct}%;background:${bar}"></div></div></div>
       ${retestRow}
     </div>`;
   }).join('');
-
   document.getElementById('my-stats-list').innerHTML = rows;
 }
 
 function selectTest(id) {
+  const t = tests.find(x => x.id === id);
+  if (!t) return;
+  // 期限切れ未提出は選択不可
+  const already = submissions.find(s => s.testId===id && s.studentNumber===currentUser.number && !s.isRetest);
+  if (isDeadlinePassed(t) && !already) return;
   selectedTestId = id;
   document.querySelectorAll('.test-card').forEach(c => c.classList.remove('selected'));
-  document.querySelectorAll('.test-card-dot').forEach(d => { d.style.background=''; d.style.borderColor=''; });
   document.getElementById('tc-'+id)?.classList.add('selected');
   document.getElementById('btn-go-input').disabled = false;
 }
@@ -898,11 +808,33 @@ function goToInput() {
   document.getElementById('photo-badge').className='required-badge';
   document.getElementById('photo-badge').textContent='必須';
   document.getElementById('score-max-label').textContent='/'+t.maxScore;
+  hideErr('input-err');
+
+  // 期限切れバナー表示
+  const expired = isDeadlinePassed(t);
+  const bannerEl = document.getElementById('expired-banner');
+  const bannerTextEl = document.getElementById('expired-banner-text');
+  if (expired) {
+    bannerEl.style.display='flex';
+    const dlStr = new Date(t.deadline).toLocaleString('ja',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    bannerTextEl.innerHTML = `提出期限（${dlStr}）を過ぎています。<br>点数を入力しても<strong style="color:var(--red)">自動的に「再テスト対象」</strong>として処理されます。`;
+  } else {
+    bannerEl.style.display='none';
+  }
+
+  // テスト情報
+  const dlInfo = t.deadline
+    ? `<div style="margin-top:6px;font-size:12px;color:${expired?'var(--red)':'var(--muted)'};font-weight:600">
+         ⏰ 提出期限: ${new Date(t.deadline).toLocaleString('ja',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'})}
+         ${expired?' <span class="badge badge-red" style="font-size:10px">期限切れ</span>':''}
+       </div>` : '';
+
   document.getElementById('selected-test-info').innerHTML =
     `<div style="font-weight:700;font-size:15px">${t.name}</div>
-     <div style="color:var(--muted);font-size:13px;margin-top:4px">${t.date} · 満点${t.maxScore}点 · 合格ライン${t.threshold}%以上</div>`;
+     <div style="color:var(--muted);font-size:13px;margin-top:4px">${t.date} · 満点${t.maxScore}点 · 合格ライン${t.threshold}%以上</div>
+     ${dlInfo}`;
+
   updatePct();
-  hideErr('input-err');
   showScreen('screen-input');
 }
 
@@ -914,8 +846,10 @@ function updatePct() {
   const el = document.getElementById('score-pct-display');
   if (pct===null) { el.textContent='—'; el.style.color='var(--muted)'; return; }
   const color = pct>=80?'var(--green)':pct>=60?'#c08000':'var(--red)';
-  el.textContent = pct+'% '+(pct>=t.threshold?'✓ 合格ライン超え':'⚠ 再テスト対象');
-  el.style.color = color;
+  // 期限切れなら常に再テスト表示
+  const expired = isDeadlinePassed(t);
+  el.textContent = pct+'% '+((!expired && pct>=t.threshold)?'✓ 合格ライン超え':'⚠ 再テスト対象');
+  el.style.color = expired ? 'var(--red)' : color;
 }
 
 function handlePhoto(input) {
@@ -940,21 +874,22 @@ function submitScore() {
   const t = tests.find(x => x.id===selectedTestId);
   if (!t) return;
   const scoreVal = document.getElementById('score-input').value;
-  if (scoreVal==='' || scoreVal===null) { showErr('input-err','点数を入力してください'); return; }
+  if (scoreVal===''||scoreVal===null) { showErr('input-err','点数を入力してください'); return; }
   const score = parseFloat(scoreVal);
   if (isNaN(score)||score<0||score>t.maxScore) { showErr('input-err',`0〜${t.maxScore}の範囲で入力してください`); return; }
   if (!capturedPhoto) { showErr('input-err','答案の写真を撮影してください（必須です）'); return; }
 
   const pct = Math.round(score/t.maxScore*100);
+  const expired = isDeadlinePassed(t);
+  // 期限切れの場合は得点に関わらず再テスト扱い
+  const needsRetest = expired || pct < t.threshold;
+
   const sub = {
-    id: Date.now(),
-    testId: t.id,
-    testName: t.name,
-    studentNumber: currentUser.number,
-    studentName: currentUser.name,
-    score, maxScore: t.maxScore, threshold: t.threshold,
-    pct,
-    needsRetest: pct < t.threshold,
+    id: Date.now(), testId: t.id, testName: t.name,
+    studentNumber: currentUser.number, studentName: currentUser.name,
+    score, maxScore: t.maxScore, threshold: t.threshold, pct,
+    needsRetest,
+    isExpiredSubmission: expired,
     photoDataURL: capturedPhoto,
     submittedAt: new Date().toISOString(),
     date: t.date
@@ -962,20 +897,25 @@ function submitScore() {
   submissions.push(sub);
   save();
 
-  const retestMsg = sub.needsRetest
-    ? `⚠️ 点数が${t.threshold}%を下回っているため、再テストがあります。`
-    : `✅ 合格ラインを超えています！`;
-  document.getElementById('success-icon').textContent = sub.needsRetest ? '⚠️' : '✅';
-  document.getElementById('success-title').textContent = sub.needsRetest ? '提出完了 — 再テストあり' : '提出完了！';
+  let retestMsg;
+  if (expired && pct >= t.threshold) {
+    retestMsg = '⚠️ 提出期限を過ぎているため、再テスト対象となります。';
+  } else if (needsRetest) {
+    retestMsg = `⚠️ 点数が${t.threshold}%を下回っているため、再テストがあります。`;
+  } else {
+    retestMsg = '✅ 合格ラインを超えています！';
+  }
+
+  document.getElementById('success-icon').textContent = needsRetest ? '⚠️' : '✅';
+  document.getElementById('success-title').textContent = needsRetest ? '提出完了 — 再テストあり' : '提出完了！';
   document.getElementById('success-msg').innerHTML =
     `<strong>${currentUser.name}</strong>さんの「${t.name}」<br>${score}/${t.maxScore}点 (${pct}%)<br>${retestMsg}`;
 
-  if (sub.needsRetest) {
-    // 再テストエリアを表示、ログアウトボタンを無効化
+  if (needsRetest) {
     document.getElementById('retest-area').style.display = '';
     document.getElementById('logout-btn-success').disabled = true;
     document.getElementById('logout-btn-success').textContent = '再テストを送信後にログアウトできます';
-    document.getElementById('retest-score-max-label').textContent = '/' + t.maxScore;
+    document.getElementById('retest-score-max-label').textContent = '/'+t.maxScore;
     document.getElementById('retest-score-input').value = '';
     document.getElementById('retest-score-input').max = t.maxScore;
     document.getElementById('retest-pct-display').textContent = '—';
@@ -996,19 +936,15 @@ function submitScore() {
 }
 
 function changeAdminPw() {
-  const cur     = document.getElementById('pw-current').value;
-  const newPw   = document.getElementById('pw-new').value;
-  const confirm = document.getElementById('pw-confirm').value;
-  const errEl   = document.getElementById('pw-err');
-  const okEl    = document.getElementById('pw-ok');
+  const cur=document.getElementById('pw-current').value;
+  const newPw=document.getElementById('pw-new').value;
+  const confirm=document.getElementById('pw-confirm').value;
+  const errEl=document.getElementById('pw-err'); const okEl=document.getElementById('pw-ok');
   errEl.classList.remove('show'); okEl.style.display='none';
-
-  if (cur !== ADMIN_PW)   { errEl.textContent='現在のパスワードが違います'; errEl.classList.add('show'); return; }
-  if (!newPw)             { errEl.textContent='新しいパスワードを入力してください'; errEl.classList.add('show'); return; }
-  if (newPw !== confirm)  { errEl.textContent='新しいパスワードが一致しません'; errEl.classList.add('show'); return; }
-
-  ADMIN_PW = newPw;
-  save();
+  if (cur!==ADMIN_PW) { errEl.textContent='現在のパスワードが違います'; errEl.classList.add('show'); return; }
+  if (!newPw) { errEl.textContent='新しいパスワードを入力してください'; errEl.classList.add('show'); return; }
+  if (newPw!==confirm) { errEl.textContent='新しいパスワードが一致しません'; errEl.classList.add('show'); return; }
+  ADMIN_PW=newPw; save();
   document.getElementById('pw-current').value='';
   document.getElementById('pw-new').value='';
   document.getElementById('pw-confirm').value='';
@@ -1017,18 +953,15 @@ function changeAdminPw() {
 }
 
 // ══ RETEST ══
-let retestCapturedPhoto = null;
-
 function updateRetestPct() {
-  const t = tests.find(x => x.id===selectedTestId);
-  if (!t) return;
+  const t = tests.find(x => x.id===selectedTestId); if (!t) return;
   const v = parseFloat(document.getElementById('retest-score-input').value);
   const pct = isNaN(v) ? null : Math.round(v/t.maxScore*100);
   const el = document.getElementById('retest-pct-display');
   if (pct===null) { el.textContent='—'; el.style.color='var(--muted)'; return; }
   const color = pct>=80?'var(--green)':pct>=60?'#c08000':'var(--red)';
   el.textContent = pct+'% '+(pct>=t.threshold?'✓ 合格ライン超え':'⚠ まだ再テスト対象');
-  el.style.color = color;
+  el.style.color=color;
 }
 
 function handleRetestPhoto(input) {
@@ -1037,7 +970,7 @@ function handleRetestPhoto(input) {
   reader.onload = e => {
     retestCapturedPhoto = e.target.result;
     const prev = document.getElementById('retest-photo-preview');
-    prev.src = retestCapturedPhoto; prev.style.display='block';
+    prev.src=retestCapturedPhoto; prev.style.display='block';
     document.getElementById('retest-photo-zone').classList.add('has-photo');
     document.getElementById('retest-photo-icon').textContent='✅';
     document.getElementById('retest-photo-text').textContent='写真が選択されました';
@@ -1047,38 +980,28 @@ function handleRetestPhoto(input) {
 
 function submitRetest() {
   hideErr('retest-err');
-  const t = tests.find(x => x.id===selectedTestId);
-  if (!t) return;
+  const t = tests.find(x => x.id===selectedTestId); if (!t) return;
   const scoreVal = document.getElementById('retest-score-input').value;
   if (scoreVal===''||scoreVal===null) { showErr('retest-err','再テストの点数を入力してください'); return; }
   const score = parseFloat(scoreVal);
   if (isNaN(score)||score<0||score>t.maxScore) { showErr('retest-err',`0〜${t.maxScore}の範囲で入力してください`); return; }
   if (!retestCapturedPhoto) { showErr('retest-err','再テストの答案写真を撮影してください'); return; }
-
   const pct = Math.round(score/t.maxScore*100);
   const sub = {
-    id: Date.now(),
-    testId: t.id,
-    testName: t.name + '【再テスト】',
-    studentNumber: currentUser.number,
-    studentName: currentUser.name,
-    score, maxScore: t.maxScore, threshold: t.threshold,
-    pct,
-    needsRetest: pct < t.threshold,
-    photoDataURL: retestCapturedPhoto,
-    submittedAt: new Date().toISOString(),
-    date: t.date,
-    isRetest: true
+    id:Date.now(), testId:t.id, testName:t.name+'【再テスト】',
+    studentNumber:currentUser.number, studentName:currentUser.name,
+    score, maxScore:t.maxScore, threshold:t.threshold, pct,
+    needsRetest: pct<t.threshold,
+    photoDataURL:retestCapturedPhoto,
+    submittedAt:new Date().toISOString(), date:t.date, isRetest:true
   };
-  submissions.push(sub);
-  save();
-
-  document.getElementById('retest-area').style.display = 'none';
-  document.getElementById('logout-btn-success').disabled = false;
-  document.getElementById('logout-btn-success').textContent = 'ログアウト';
-  document.getElementById('success-icon').textContent = '✅';
-  document.getElementById('success-title').textContent = '再テスト提出完了！';
-  const result = pct >= t.threshold ? '✅ 合格！お疲れ様でした。' : '⚠️ 再度先生に確認してもらってください。';
+  submissions.push(sub); save();
+  document.getElementById('retest-area').style.display='none';
+  document.getElementById('logout-btn-success').disabled=false;
+  document.getElementById('logout-btn-success').textContent='ログアウト';
+  document.getElementById('success-icon').textContent='✅';
+  document.getElementById('success-title').textContent='再テスト提出完了！';
+  const result = pct>=t.threshold ? '✅ 合格！お疲れ様でした。' : '⚠️ 再度先生に確認してもらってください。';
   document.getElementById('success-msg').innerHTML =
     `<strong>${currentUser.name}</strong>さんの再テスト「${t.name}」<br>${score}/${t.maxScore}点 (${pct}%)<br>${result}`;
 }
@@ -1089,59 +1012,95 @@ function adminTab(tab) {
   document.querySelectorAll('.admin-nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('admin-'+tab).classList.add('active');
   event.target.classList.add('active');
-  if(tab==='dash') renderAdminDash();
-  if(tab==='ranking') renderRankSel();
-  if(tab==='history') renderHistory();
+  if(tab==='dash')     renderAdminDash();
+  if(tab==='ranking')  renderRankSel();
+  if(tab==='history')  renderHistory();
   if(tab==='calendar') renderCal();
   if(tab==='students') renderStudents();
-  if(tab==='tests') renderTestManage();
+  if(tab==='tests')    renderTestManage();
 }
 
 function renderAdminDash() {
-  const totalTests = tests.length;
-  const totalSubs  = submissions.length;
-  const allPct     = submissions.map(s=>s.pct);
-  const avgPct     = allPct.length ? Math.round(allPct.reduce((a,b)=>a+b,0)/allPct.length) : 0;
-  const retestN    = submissions.filter(s=>s.needsRetest).length;
+  const totalSubs = submissions.length;
+  const allPct = submissions.map(s=>s.pct);
+  const avgPct = allPct.length ? Math.round(allPct.reduce((a,b)=>a+b,0)/allPct.length) : 0;
+  const retestN = submissions.filter(s=>s.needsRetest).length;
+  const overdue = getOverdueList();
+
   document.getElementById('admin-stats').innerHTML = `
-    <div class="stat-box"><div class="stat-num">${totalTests}</div><div class="stat-label">テスト数</div></div>
+    <div class="stat-box"><div class="stat-num">${tests.length}</div><div class="stat-label">テスト数</div></div>
     <div class="stat-box"><div class="stat-num">${students.length}</div><div class="stat-label">登録生徒</div></div>
     <div class="stat-box"><div class="stat-num">${totalSubs}</div><div class="stat-label">提出数</div></div>
     <div class="stat-box"><div class="stat-num" style="color:${avgPct>=80?'var(--green)':'var(--red)'}">${avgPct}%</div><div class="stat-label">全体平均</div></div>
     <div class="stat-box"><div class="stat-num" style="color:var(--red)">${retestN}</div><div class="stat-label">再テスト対象</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--orange)">${overdue.length}</div><div class="stat-label">期限切れ未提出</div></div>
   `;
+
   const retestEl = document.getElementById('admin-retest');
   const rs = submissions.filter(s=>s.needsRetest);
-  retestEl.innerHTML = rs.length ? rs.slice(0,8).map(s=>
-    `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
-      <span style="font-weight:700;flex:1">${s.studentName}</span>
-      <span style="font-size:11px;color:var(--muted)">${s.testName}</span>
-      <span class="badge badge-red">${s.pct}%</span>
-    </div>`).join('')+'<div style="margin-top:8px;font-size:12px;color:var(--muted);text-align:right">計${rs.length}件</div>'
+  retestEl.innerHTML = rs.length
+    ? rs.slice(0,8).map(s=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="font-weight:700;flex:1">${s.studentName}</span>
+        <span style="font-size:11px;color:var(--muted)">${s.testName}</span>
+        <span class="badge badge-red">${s.pct}%</span>
+      </div>`).join('')+'<div style="margin-top:8px;font-size:12px;color:var(--muted);text-align:right">計'+rs.length+'件</div>'
     : '<div style="text-align:center;padding:20px;color:var(--muted)">再テスト対象者なし ✓</div>';
 
   const recentEl = document.getElementById('admin-recent');
   const recent = [...submissions].sort((a,b)=>b.submittedAt.localeCompare(a.submittedAt)).slice(0,6);
-  recentEl.innerHTML = recent.length ? recent.map(s=>
-    `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
-      <div style="flex:1">
-        <div style="font-weight:700;font-size:13px">${s.studentName}</div>
-        <div style="font-size:11px;color:var(--muted)">${s.testName}</div>
-      </div>
-      <span class="badge ${s.pct>=80?'badge-green':'badge-red'}">${s.pct}%</span>
-    </div>`).join('')
+  recentEl.innerHTML = recent.length
+    ? recent.map(s=>`
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <div style="flex:1"><div style="font-weight:700;font-size:13px">${s.studentName}</div><div style="font-size:11px;color:var(--muted)">${s.testName}</div></div>
+        <span class="badge ${s.pct>=80?'badge-green':'badge-red'}">${s.pct}%</span>
+      </div>`).join('')
     : '<div style="text-align:center;padding:20px;color:var(--muted)">まだ提出がありません</div>';
+
+  // 期限切れ未提出
+  const overdueEl = document.getElementById('admin-overdue');
+  if (!overdue.length) {
+    overdueEl.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted)">期限切れ未提出者なし ✓</div>';
+  } else {
+    // テストごとにグループ化
+    const groups = {};
+    overdue.forEach(o => {
+      const key = o.test.id;
+      if (!groups[key]) groups[key] = { test: o.test, students: [] };
+      groups[key].students.push(o.student);
+    });
+    overdueEl.innerHTML = Object.values(groups).map(g => {
+      const dlStr = new Date(g.test.deadline).toLocaleString('ja',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      return `<div style="margin-bottom:16px">
+        <div style="font-weight:700;font-size:13px;color:var(--orange);margin-bottom:6px">
+          ${g.test.name} <span style="font-weight:400;font-size:11px;color:var(--muted)">期限: ${dlStr}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${g.students.map(s=>`<span style="background:var(--orange-pale);border:1px solid #f5c090;color:var(--orange);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700">${s.number}番 ${s.name}</span>`).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  }
 }
 
 function renderTestManage() {
   document.getElementById('t-date').value = today.toISOString().split('T')[0];
   const el = document.getElementById('test-manage-list');
   el.innerHTML = tests.length ? tests.sort((a,b)=>b.date.localeCompare(a.date)).map(t=>{
-    const subCount = submissions.filter(s=>s.testId===t.id).length;
+    const subCount = submissions.filter(s=>s.testId===t.id&&!s.isRetest).length;
+    const overdueCount = students.filter(s => {
+      return isDeadlinePassed(t) && !submissions.find(x=>x.testId===t.id && x.studentNumber===s.number && !x.isRetest);
+    }).length;
+    const dlStr = t.deadline
+      ? `· 期限: ${new Date(t.deadline).toLocaleString('ja',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}`
+      : '· 期限: 未設定';
+    const expiredBadge = isDeadlinePassed(t) ? `<span class="badge badge-red" style="margin-left:4px">期限切れ</span>` : '';
+    const overdueInfo = overdueCount > 0
+      ? `<span class="badge badge-orange" style="margin-left:4px">未提出 ${overdueCount}名</span>` : '';
     return `<div class="test-manage-card">
       <div style="flex:1">
-        <div style="font-weight:700">${t.name}</div>
-        <div style="font-size:12px;color:var(--muted)">${t.date} · 満点${t.maxScore}点 · 閾値${t.threshold}% · 提出${subCount}件</div>
+        <div style="font-weight:700">${t.name}${expiredBadge}${overdueInfo}</div>
+        <div style="font-size:12px;color:var(--muted)">${t.date} · 満点${t.maxScore}点 · 閾値${t.threshold}% ${dlStr} · 提出${subCount}件</div>
       </div>
       <button class="btn-sm btn-red" onclick="deleteTest(${t.id})">削除</button>
     </div>`;
@@ -1153,10 +1112,12 @@ function createTest() {
   const date = document.getElementById('t-date').value;
   const max  = parseInt(document.getElementById('t-max').value);
   const thr  = parseInt(document.getElementById('t-thresh').value);
+  const dl   = document.getElementById('t-deadline').value; // datetime-local string or ''
   if (!name||!date||!max) { alert('テスト名・日付・満点を入力してください'); return; }
-  tests.push({ id:Date.now(), name, date, maxScore:max, threshold:thr||80 });
+  tests.push({ id:Date.now(), name, date, maxScore:max, threshold:thr||80, deadline: dl||null });
   save(); renderTestManage();
   document.getElementById('t-name').value='';
+  document.getElementById('t-deadline').value='';
 }
 
 function deleteTest(id) {
@@ -1177,11 +1138,35 @@ function renderRankSel() {
 function renderRanking() {
   const tid = parseInt(document.getElementById('rank-sel').value);
   const sort = document.getElementById('rank-sort').value;
+  const filter = document.getElementById('rank-filter').value;
   const t = tests.find(x=>x.id===tid);
   const el = document.getElementById('ranking-content');
   if (!t) { el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)">テストを選択してください</div>'; return; }
 
-  let subs = submissions.filter(s=>s.testId===tid);
+  const expired = isDeadlinePassed(t);
+  const overdueStudents = expired
+    ? students.filter(s => !submissions.find(x=>x.testId===t.id && x.studentNumber===s.number && !x.isRetest))
+    : [];
+
+  let subs = submissions.filter(s=>s.testId===tid && !s.isRetest);
+
+  // フィルタ
+  if (filter==='overdue') {
+    // 未提出+期限切れのみ表示（別ビュー）
+    el.innerHTML = `
+      <div style="margin-bottom:12px;font-size:13px;color:var(--orange);font-weight:700">
+        ${expired ? `期限切れ未提出者 — ${overdueStudents.length}名` : '期限がまだ過ぎていません'}
+      </div>
+      ${overdueStudents.length
+        ? `<div class="tbl-wrap"><table>
+            <thead><tr><th>出席番号</th><th>氏名</th><th>状態</th></tr></thead>
+            <tbody>${overdueStudents.map(s=>`<tr><td style="font-family:var(--mono)">${s.number}番</td><td style="font-weight:700">${s.name}</td><td><span class="badge badge-orange">未提出</span></td></tr>`).join('')}</tbody>
+           </table></div>`
+        : '<div style="text-align:center;padding:32px;color:var(--muted)">未提出者なし ✓</div>'
+      }`;
+    return;
+  }
+
   if (sort==='desc') subs.sort((a,b)=>b.score-a.score);
   else if (sort==='asc') subs.sort((a,b)=>a.score-b.score);
   else subs.sort((a,b)=>a.studentName.localeCompare(b.studentName,'ja'));
@@ -1189,13 +1174,20 @@ function renderRanking() {
   const sorted = [...subs].sort((a,b)=>b.score-a.score);
   const avg = subs.length ? Math.round(subs.reduce((a,b)=>a+b.score,0)/subs.length) : 0;
   const avgPct = subs.length ? Math.round(avg/t.maxScore*100) : 0;
+  const dlStr = t.deadline
+    ? `<div style="margin-bottom:12px;font-size:12px;padding:8px 12px;border-radius:8px;font-weight:700;background:${expired?'var(--red-pale)':'var(--orange-pale)'};color:${expired?'var(--red)':'var(--orange)'}">
+        ⏰ 提出期限: ${new Date(t.deadline).toLocaleString('ja',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'})}
+        ${expired ? ` — <span class="badge badge-red" style="font-size:10px">期限切れ</span> 未提出: ${overdueStudents.length}名` : ` — ${deadlineLabel(t)}`}
+      </div>` : '';
 
   el.innerHTML = `
+    ${dlStr}
     <div class="stats-grid" style="margin-bottom:20px">
       <div class="stat-box"><div class="stat-num">${subs.length}</div><div class="stat-label">提出数</div></div>
       <div class="stat-box"><div class="stat-num">${avg}</div><div class="stat-label">平均点</div></div>
       <div class="stat-box"><div class="stat-num" style="color:${avgPct>=80?'var(--green)':'var(--red)'}">${avgPct}%</div><div class="stat-label">平均達成率</div></div>
       <div class="stat-box"><div class="stat-num" style="color:var(--red)">${subs.filter(s=>s.needsRetest).length}</div><div class="stat-label">再テスト対象</div></div>
+      ${expired ? `<div class="stat-box"><div class="stat-num" style="color:var(--orange)">${overdueStudents.length}</div><div class="stat-label">期限切れ未提出</div></div>` : ''}
     </div>
     <div class="tbl-wrap"><table>
       <thead><tr><th>順位</th><th>出席番号</th><th>氏名</th><th>点数</th><th>達成率</th><th>グラフ</th><th>状態</th><th>答案</th></tr></thead>
@@ -1204,6 +1196,7 @@ function renderRanking() {
         const rank = sorted.findIndex(x=>x.id===s.id)+1;
         const medal = rank===1?'medal-1':rank===2?'medal-2':rank===3?'medal-3':'medal-n';
         const bar = s.pct>=80?'#2a7a52':s.pct>=60?'#c08000':'#c94040';
+        const expiredBadge = s.isExpiredSubmission ? '<span class="badge badge-orange" style="margin-left:4px;font-size:10px">期限後</span>' : '';
         return `<tr>
           <td><span class="rank-medal ${medal}">${rank}</span></td>
           <td style="font-family:var(--mono)">${s.studentNumber}番</td>
@@ -1211,10 +1204,18 @@ function renderRanking() {
           <td style="font-family:var(--mono);font-weight:700">${s.score}/${t.maxScore}</td>
           <td style="font-weight:700;color:${bar}">${s.pct}%</td>
           <td style="min-width:90px"><div class="progress-bg"><div class="progress-fill" style="width:${s.pct}%;background:${bar}"></div></div></td>
-          <td>${s.needsRetest?'<span class="badge badge-red">再テスト</span>':'<span class="badge badge-green">✓ 合格</span>'}</td>
-          <td><button class="thumb-btn" onclick="showPhoto(${s.id}, '${s.studentName}')">📷 表示</button></td>
+          <td>${s.needsRetest?'<span class="badge badge-red">再テスト</span>':'<span class="badge badge-green">✓ 合格</span>'}${expiredBadge}</td>
+          <td><button class="thumb-btn" onclick="showPhoto(${s.id},'${s.studentName}')">📷 表示</button></td>
         </tr>`;
       }).join('')}
+      ${filter!=='submitted' ? overdueStudents.map(s=>`
+        <tr style="background:var(--orange-pale)">
+          <td><span class="rank-medal medal-n">—</span></td>
+          <td style="font-family:var(--mono)">${s.number}番</td>
+          <td style="font-weight:700">${s.name}</td>
+          <td colspan="4" style="color:var(--orange);font-weight:700;font-size:12px">⛔ 未提出（期限切れ）</td>
+          <td></td>
+        </tr>`).join('') : ''}
       </tbody>
     </table></div>
   `;
@@ -1223,6 +1224,31 @@ function renderRanking() {
 function renderHistory() {
   const q = document.getElementById('hist-q').value.toLowerCase();
   const f = document.getElementById('hist-f').value;
+
+  // 期限切れ未提出フィルタ
+  if (f==='overdue') {
+    const overdue = getOverdueList();
+    const el = document.getElementById('history-content');
+    if (!overdue.length) { el.innerHTML='<div style="text-align:center;padding:48px;color:var(--muted)">期限切れ未提出者なし ✓</div>'; return; }
+    const groups = {};
+    overdue.forEach(o=>{
+      if (!groups[o.test.id]) groups[o.test.id]={test:o.test,students:[]};
+      groups[o.test.id].students.push(o.student);
+    });
+    el.innerHTML = Object.values(groups).map(g=>{
+      const dlStr = new Date(g.test.deadline).toLocaleString('ja',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      return `<div class="section-card" style="margin-bottom:16px;border-color:#f5c090">
+        <div style="font-weight:700;font-size:15px;color:var(--orange);margin-bottom:4px">${g.test.name}</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px">期限: ${dlStr} · 未提出: ${g.students.length}名</div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>出席番号</th><th>氏名</th><th>状態</th></tr></thead>
+          <tbody>${g.students.map(s=>`<tr><td style="font-family:var(--mono)">${s.number}番</td><td style="font-weight:700">${s.name}</td><td><span class="badge badge-orange">未提出（期限切れ）</span></td></tr>`).join('')}</tbody>
+        </table></div>
+      </div>`;
+    }).join('');
+    return;
+  }
+
   let data = [...submissions].sort((a,b)=>b.submittedAt.localeCompare(a.submittedAt));
   if (q) data = data.filter(s=>s.testName.toLowerCase().includes(q)||s.studentName.toLowerCase().includes(q));
   if (f==='retest') data = data.filter(s=>s.needsRetest);
@@ -1231,29 +1257,34 @@ function renderHistory() {
   const el = document.getElementById('history-content');
   if (!data.length) { el.innerHTML='<div style="text-align:center;padding:48px;color:var(--muted)">該当データがありません</div>'; return; }
 
-  // Group by testId
   const groups = {};
-  data.forEach(s=>{ if(!groups[s.testId]) groups[s.testId]={name:s.testName,date:s.date,maxScore:s.maxScore,threshold:s.threshold,subs:[]}; groups[s.testId].subs.push(s); });
+  data.forEach(s=>{ if(!groups[s.testId]) groups[s.testId]={name:s.testName,date:s.date,maxScore:s.maxScore,threshold:s.threshold,testId:s.testId,subs:[]}; groups[s.testId].subs.push(s); });
 
   el.innerHTML = Object.values(groups).map(g=>{
+    const t = tests.find(x=>x.id===g.testId);
     const avg = Math.round(g.subs.reduce((a,b)=>a+b.score,0)/g.subs.length/g.maxScore*100);
+    const dlStr = t && t.deadline
+      ? `· 期限: ${new Date(t.deadline).toLocaleString('ja',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})} ${isDeadlinePassed(t)?'<span class="badge badge-red" style="font-size:10px">期限切れ</span>':''}`
+      : '';
     return `<div class="section-card" style="margin-bottom:16px">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
-        <div style="flex:1"><div style="font-weight:700;font-size:15px">${g.name}</div><div style="font-size:12px;color:var(--muted)">${g.date} · 満点${g.maxScore}点 · 閾値${g.threshold}%</div></div>
+        <div style="flex:1"><div style="font-weight:700;font-size:15px">${g.name}</div><div style="font-size:12px;color:var(--muted)">${g.date} · 満点${g.maxScore}点 · 閾値${g.threshold}% ${dlStr}</div></div>
         <span class="badge ${avg>=80?'badge-green':'badge-red'}">平均 ${avg}%</span>
       </div>
       <div class="tbl-wrap"><table>
         <thead><tr><th>出席番号</th><th>氏名</th><th>点数</th><th>達成率</th><th>状態</th><th>提出日時</th><th>答案</th></tr></thead>
-        <tbody>${g.subs.map(s=>
-          `<tr style="${s.needsRetest?'background:var(--red-pale)':''}">
+        <tbody>${g.subs.map(s=>{
+          const expiredTag = s.isExpiredSubmission ? '<span class="badge badge-orange" style="font-size:10px;margin-left:4px">期限後</span>' : '';
+          return `<tr style="${s.needsRetest?'background:var(--red-pale)':''}">
             <td style="font-family:var(--mono)">${s.studentNumber}番</td>
             <td style="font-weight:700">${s.studentName}</td>
             <td>${s.score}/${s.maxScore}</td>
             <td><span class="badge ${s.pct>=80?'badge-green':s.pct>=60?'badge-gold':'badge-red'}">${s.pct}%</span></td>
-            <td>${s.needsRetest?'<span class="badge badge-red">再テスト</span>':'<span class="badge badge-green">✓ 合格</span>'}</td>
+            <td>${s.needsRetest?'<span class="badge badge-red">再テスト</span>':'<span class="badge badge-green">✓ 合格</span>'}${expiredTag}</td>
             <td style="font-size:12px;color:var(--muted)">${new Date(s.submittedAt).toLocaleString('ja')}</td>
             <td><button class="thumb-btn" onclick="showPhoto(${s.id},'${s.studentName}')">📷</button></td>
-          </tr>`).join('')}
+          </tr>`;
+        }).join('')}
         </tbody>
       </table></div>
     </div>`;
@@ -1270,6 +1301,15 @@ function renderCal() {
     if(!dateMap[s.date]) dateMap[s.date]=[];
     dateMap[s.date].push(s);
   });
+  // 提出期限をカレンダーに追加
+  const deadlineMap={};
+  tests.forEach(t=>{
+    if(!t.deadline) return;
+    const dlDate = t.deadline.split('T')[0];
+    if(!deadlineMap[dlDate]) deadlineMap[dlDate]=[];
+    deadlineMap[dlDate].push(t);
+  });
+
   const cells=[];
   for(let i=0;i<startDay;i++) cells.push({d:new Date(calY,calM,-startDay+i+1),cur:false});
   for(let d=1;d<=last.getDate();d++) cells.push({d:new Date(calY,calM,d),cur:true});
@@ -1278,11 +1318,14 @@ function renderCal() {
   document.getElementById('cal-cells').innerHTML=cells.map(c=>{
     const key=`${c.d.getFullYear()}-${String(c.d.getMonth()+1).padStart(2,'0')}-${String(c.d.getDate()).padStart(2,'0')}`;
     const ss=dateMap[key]||[];
+    const deadlines=deadlineMap[key]||[];
     const isToday=c.d.toDateString()===today.toDateString();
     const hasWarn=ss.some(s=>s.needsRetest);
     const testNames=[...new Set(ss.map(s=>s.testName))];
-    return `<div class="cal-cell${!c.cur?' other':''}${isToday?' today':''}" onclick="${c.cur&&ss.length?`openCalDay('${key}')`:''}" style="${!c.cur?'pointer-events:none':''}">
+    const dlDots=deadlines.map(t=>`<span class="cal-dot deadline">${(t.name.length>7?t.name.slice(0,7)+'…':t.name)}〆</span>`).join('');
+    return `<div class="cal-cell${!c.cur?' other':''}${isToday?' today':''}" onclick="${c.cur&&(ss.length||deadlines.length)?`openCalDay('${key}')`:''}" style="${!c.cur?'pointer-events:none':''}">
       <div class="cal-num">${c.d.getDate()}</div>
+      ${dlDots}
       ${testNames.slice(0,2).map(n=>`<span class="cal-dot${hasWarn?' warn':''}">${n.length>7?n.slice(0,7)+'…':n}</span>`).join('')}
       ${testNames.length>2?`<span style="font-size:9px;color:var(--muted)">+${testNames.length-2}</span>`:''}
     </div>`;
@@ -1297,26 +1340,40 @@ function calMove(dir) {
 
 function openCalDay(dateStr) {
   const ss=submissions.filter(s=>s.date===dateStr);
-  if(!ss.length) return;
+  const deadlines=tests.filter(t=>t.deadline && t.deadline.split('T')[0]===dateStr);
+  if(!ss.length && !deadlines.length) return;
   document.getElementById('cal-modal-title').textContent=`📅 ${dateStr}`;
-  const groups={};
-  ss.forEach(s=>{ if(!groups[s.testId]) groups[s.testId]={name:s.testName,subs:[]}; groups[s.testId].subs.push(s); });
-  document.getElementById('cal-modal-body').innerHTML=Object.values(groups).map(g=>
-    `<div style="margin-bottom:16px">
-      <div style="font-weight:700;margin-bottom:8px">${g.name}</div>
-      ${g.subs.map(s=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
-        <span style="font-family:var(--mono);color:var(--muted);font-size:12px">${s.studentNumber}番</span>
-        <span style="font-weight:700;flex:1">${s.studentName}</span>
-        <span class="badge ${s.pct>=80?'badge-green':'badge-red'}">${s.pct}%</span>
-        <button class="thumb-btn btn-sm" onclick="showPhoto(${s.id},'${s.studentName}')">📷</button>
-      </div>`).join('')}
-    </div>`).join('');
+  let html='';
+  if(deadlines.length){
+    html+=`<div style="margin-bottom:16px;padding:10px 14px;background:var(--orange-pale);border:1px solid #f5c090;border-radius:10px">
+      <div style="font-weight:700;color:var(--orange);margin-bottom:8px">⏰ 本日が提出期限のテスト</div>
+      ${deadlines.map(t=>{
+        const overdueCount = students.filter(s=>!submissions.find(x=>x.testId===t.id&&x.studentNumber===s.number&&!x.isRetest)).length;
+        return `<div style="font-size:13px;font-weight:600;margin-bottom:4px">${t.name}<span style="font-weight:400;color:var(--muted);margin-left:6px">未提出: ${overdueCount}名</span></div>`;
+      }).join('')}
+    </div>`;
+  }
+  if(ss.length){
+    const groups={};
+    ss.forEach(s=>{ if(!groups[s.testId]) groups[s.testId]={name:s.testName,subs:[]}; groups[s.testId].subs.push(s); });
+    html+=Object.values(groups).map(g=>
+      `<div style="margin-bottom:16px">
+        <div style="font-weight:700;margin-bottom:8px">${g.name}</div>
+        ${g.subs.map(s=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+          <span style="font-family:var(--mono);color:var(--muted);font-size:12px">${s.studentNumber}番</span>
+          <span style="font-weight:700;flex:1">${s.studentName}</span>
+          <span class="badge ${s.pct>=80?'badge-green':'badge-red'}">${s.pct}%</span>
+          <button class="thumb-btn btn-sm" onclick="showPhoto(${s.id},'${s.studentName}')">📷</button>
+        </div>`).join('')}
+      </div>`).join('');
+  }
+  document.getElementById('cal-modal-body').innerHTML=html;
   document.getElementById('cal-modal').classList.add('open');
 }
 
 function renderStudents() {
-  const el = document.getElementById('student-table');
-  if (!students.length) { el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)">生徒が登録されていません</div>'; return; }
+  const el=document.getElementById('student-table');
+  if(!students.length){el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)">生徒が登録されていません</div>';return;}
   el.innerHTML=`<div class="tbl-wrap"><table>
     <thead><tr><th>出席番号</th><th>氏名</th><th>パスワード</th><th>提出数</th><th></th></tr></thead>
     <tbody>${[...students].sort((a,b)=>a.number-b.number).map(s=>{
@@ -1344,56 +1401,15 @@ function renderStudents() {
   </table></div>`;
 }
 
-function startEditName(num) {
-  document.getElementById('sname-display-'+num).style.display='none';
-  document.getElementById('sname-input-'+num).style.display='';
-  document.getElementById('sedit-btn-'+num).style.display='none';
-  document.getElementById('ssave-btn-'+num).style.display='';
-  document.getElementById('scancel-btn-'+num).style.display='';
-  document.getElementById('sname-input-'+num).focus();
-  document.getElementById('sname-input-'+num).select();
-}
-
-function cancelEditName(num) {
-  const s = students.find(x=>x.number===num);
-  document.getElementById('sname-input-'+num).value = s ? s.name : '';
-  document.getElementById('sname-display-'+num).style.display='';
-  document.getElementById('sname-input-'+num).style.display='none';
-  document.getElementById('sedit-btn-'+num).style.display='';
-  document.getElementById('ssave-btn-'+num).style.display='none';
-  document.getElementById('scancel-btn-'+num).style.display='none';
-}
-
-function saveStudentName(num) {
-  const newName = document.getElementById('sname-input-'+num).value.trim();
-  if (!newName) { alert('氏名を入力してください'); return; }
-  const s = students.find(x=>x.number===num);
-  if (!s) return;
-  s.name = newName;
-  save();
-  renderStudents();
-}
-
-function addStudent() {
-  const num  = parseInt(document.getElementById('s-num').value);
-  const name = document.getElementById('s-name').value.trim();
-  if (!num||!name) { alert('出席番号と氏名を入力してください'); return; }
-  if (students.find(s=>s.number===num)) { alert('その出席番号はすでに登録されています'); return; }
-  students.push({number:num, name});
-  save(); renderStudents();
-  document.getElementById('s-num').value='';
-  document.getElementById('s-name').value='';
-}
-
-function deleteStudent(num) {
-  if (!confirm('この生徒を削除しますか？提出データは残ります。')) return;
-  students=students.filter(s=>s.number!==num);
-  save(); renderStudents();
-}
+function startEditName(num){document.getElementById('sname-display-'+num).style.display='none';document.getElementById('sname-input-'+num).style.display='';document.getElementById('sedit-btn-'+num).style.display='none';document.getElementById('ssave-btn-'+num).style.display='';document.getElementById('scancel-btn-'+num).style.display='';document.getElementById('sname-input-'+num).focus();document.getElementById('sname-input-'+num).select();}
+function cancelEditName(num){const s=students.find(x=>x.number===num);document.getElementById('sname-input-'+num).value=s?s.name:'';document.getElementById('sname-display-'+num).style.display='';document.getElementById('sname-input-'+num).style.display='none';document.getElementById('sedit-btn-'+num).style.display='';document.getElementById('ssave-btn-'+num).style.display='none';document.getElementById('scancel-btn-'+num).style.display='none';}
+function saveStudentName(num){const newName=document.getElementById('sname-input-'+num).value.trim();if(!newName){alert('氏名を入力してください');return;}const s=students.find(x=>x.number===num);if(!s)return;s.name=newName;save();renderStudents();}
+function addStudent(){const num=parseInt(document.getElementById('s-num').value);const name=document.getElementById('s-name').value.trim();if(!num||!name){alert('出席番号と氏名を入力してください');return;}if(students.find(s=>s.number===num)){alert('その出席番号はすでに登録されています');return;}students.push({number:num,name});save();renderStudents();document.getElementById('s-num').value='';document.getElementById('s-name').value='';}
+function deleteStudent(num){if(!confirm('この生徒を削除しますか？提出データは残ります。'))return;students=students.filter(s=>s.number!==num);save();renderStudents();}
 
 function showPhoto(subId, name) {
-  const sub = submissions.find(s => s.id === subId);
-  if (!sub || !sub.photoDataURL) { alert('写真データがありません'); return; }
+  const sub=submissions.find(s=>s.id===subId);
+  if(!sub||!sub.photoDataURL){alert('写真データがありません');return;}
   document.getElementById('photo-modal-title').textContent=`📷 ${name} の答案写真`;
   document.getElementById('photo-modal-img').src=sub.photoDataURL;
   document.getElementById('photo-modal').classList.add('open');
@@ -1401,10 +1417,8 @@ function showPhoto(subId, name) {
 
 // ── INIT ──
 document.getElementById('t-date').value = today.toISOString().split('T')[0];
-
-// デモデータ
-if (!students.length) {
-  for (let i=1;i<=10;i++) students.push({number:i, name:`生徒${i}番`});
+if(!students.length){
+  for(let i=1;i<=10;i++) students.push({number:i,name:`生徒${i}番`});
   save();
 }
 </script>
